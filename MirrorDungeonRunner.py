@@ -316,18 +316,33 @@ class MirrorDungeonRunner:
         except:
             return None
 
-    def click_element(self, game_element: GameElement | str) -> bool:
-        if type(game_element) == str:
-            game_element: GameElement = GAME_ELEMENTS[game_element]
+    # Disgusting method, but it needs all these types to match normal pyautogui.click() functionality
+    def human_click(self, x: GameElement | str | tuple | int | None = None, y: int | None = None) -> bool:
+        if type(x) == str:
+            x = GAME_ELEMENTS[x]
 
-        try:
-            location = self.locate_on_screen(game_element)
+        location = None
+        if type(x) == GameElement:
+            location = self.locate_on_screen(x)
             if not location:
                 return False
-            pyautogui.click(location)
-            return True
-        except:
-            return False
+        elif type(x) == tuple:
+            location = x
+
+        if type(x) == int:
+            if type(y) != int:
+                logging.error(f'Type of argument y should be int, not {type(y)}')
+                return False
+
+            pyautogui.mouseDown(x, y)
+        else:
+            pyautogui.mouseDown(location)
+
+        # Average human click duration is 85ms, or 0.085s
+        time.sleep(random.gauss(0.085, 0.025))
+        pyautogui.mouseUp()
+
+        return True
 
     def move_to_element(self, game_element: GameElement | str) -> bool:
         if type(game_element) == str:
@@ -365,29 +380,29 @@ class MirrorDungeonRunner:
 
             match state:
                 case 0:
-                    pyautogui.click(self.width/2, self.height/2)
+                    self.human_click(self.width/2, self.height/2)
                 case 1:
-                    self.click_element('Drive')
+                    self.human_click('Drive')
                 case 2:
-                    self.click_element('MD5Button')
+                    self.human_click('MD5Button')
                 case 3:
-                    self.click_element(GameElement(3, "MD5StartButton.png", (715,255,550,650), 0.2))
+                    self.human_click(GameElement(3, "MD5StartButton.png", (715,255,550,650), 0.2))
                 case 4:
-                    self.click_element('EnterMD5')
+                    self.human_click('EnterMD5')
                 case 6:
-                    self.click_element('ResumeMD5')
+                    self.human_click('ResumeMD5')
                 case -1:
                     pass
                 case _:
                     return
 
     def selectBuffs(self):
-        pyautogui.click(963,727)
-        pyautogui.click(682,725)
-        pyautogui.click(1250,280)
-        pyautogui.click(400,400)
-        pyautogui.click(700,400)
-        pyautogui.click(1706,991)
+        self.human_click(963,727)
+        self.human_click(682,725)
+        self.human_click(1250,280)
+        self.human_click(400,400)
+        self.human_click(700,400)
+        self.human_click(1706,991)
 
     def get_rest_bonus(self) -> int:
         rest_bonus = 0
@@ -432,7 +447,7 @@ class MirrorDungeonRunner:
         for team in self.teams:
             curRow = self.scrollTo(int(team[0]), curRow)
             time.sleep(random.uniform(0.3, 2.0))
-            pyautogui.click()
+            self.human_click()
 
             time.sleep(random.uniform(0.1, 0.7))
 
@@ -448,9 +463,9 @@ class MirrorDungeonRunner:
 
         curRow = self.scrollTo(maxTeamRow, curRow)
         time.sleep(random.uniform(0.1, 0.7))
-        pyautogui.click()
+        self.human_click()
 
-        while not self.click_element('ConfirmTeam'):
+        while not self.human_click('ConfirmTeam'):
             pass
 
         time.sleep(1)
@@ -459,33 +474,33 @@ class MirrorDungeonRunner:
         giftType: str = self.curTeam[1].lower()
         match giftType:
             case "charge":
-                pyautogui.click(758,667)
+                self.human_click(758,667)
             case "sinking":
-                pyautogui.click(307,680)
+                self.human_click(307,680)
             case "poise":
-                pyautogui.click(522,669)
+                self.human_click(522,669)
             case "rupture":
-                pyautogui.click(975,359)
+                self.human_click(975,359)
             case "tremor":
-                pyautogui.click(748,362)
+                self.human_click(748,362)
             case "bleed":
-                pyautogui.click(520,360)
+                self.human_click(520,360)
             case "burn":
-                pyautogui.click(312,365)
+                self.human_click(312,365)
             case "slash":
-                pyautogui.click(980,685)
+                self.human_click(980,685)
             case "blunt":
-                pyautogui.click(533,844)
+                self.human_click(533,844)
             case "pierce":
-                pyautogui.click(313,846)
+                self.human_click(313,846)
 
         time.sleep(random.uniform(0.1, 0.6))
         #select gifts from top to bottom
-        pyautogui.click(1463,392)
-        pyautogui.click(1463,550)
-        pyautogui.click(1463,713)
+        self.human_click(1463,392)
+        self.human_click(1463,550)
+        self.human_click(1463,713)
         #end selection
-        pyautogui.click(1620,870)
+        self.human_click(1620,870)
 
     def run_md(self) -> None:
         while True:
@@ -507,28 +522,28 @@ class MirrorDungeonRunner:
 
     def do_event(self) -> None:
         if self.on_screen('Event_Choices'):
-            if not self.click_element('Event_EGOGIFT'):
-                pyautogui.click(1366, 350)
-                pyautogui.click(1366, 600)
-                pyautogui.click(1366, 750)
+            if not self.human_click('Event_EGOGIFT'):
+                self.human_click(1366, 350)
+                self.human_click(1366, 600)
+                self.human_click(1366, 750)
 
         # Try to click best chances
         if self.on_screen("Event_Predicted"):
             for chance in ['VeryHigh', 'High', 'Normal', 'Low', 'VeryLow']:
-                if self.click_element(f'Event_{chance}'):
+                if self.human_click(f'Event_{chance}'):
                     break
 
         for event_state in ['Commence', 'Continue', 'Proceed', 'CommenceBattle']:
             element_name = f'Event_{event_state}'
 
             if self.on_screen(element_name):
-                if not self.click_element(element_name):
-                    pyautogui.click(1707, 950)
+                if not self.human_click(element_name):
+                    self.human_click(1707, 950)
                 break
 
-        if self.click_element('Event_Skip'):
+        if self.human_click('Event_Skip'):
             for i in range(6):
-                pyautogui.click()
+                self.human_click()
                 time.sleep(random.uniform(0.1, 0.5))
 
 
@@ -539,16 +554,16 @@ class MirrorDungeonRunner:
                 continue
 
             for i in shopItems:
-                pyautogui.click(i)
+                self.human_click(i)
                 time.sleep(random.uniform(0.75, 3.0))
-                pyautogui.click(1120,712)
+                self.human_click(1120,712)
                 time.sleep(random.uniform(0.75, 1.75))
-                pyautogui.click(945,800)
+                self.human_click(945,800)
                 time.sleep(random.uniform(0.5, 1.5))
 
-        self.click_element('Shop_Leave')
+        self.human_click('Shop_Leave')
         time.sleep(random.uniform(0.5, 2.0))
-        pyautogui.click(1171,743)
+        self.human_click(1171,743)
 
     # Main MD Logic Loop
     def process_state(self) -> bool:
@@ -563,7 +578,7 @@ class MirrorDungeonRunner:
 
             case 8: # End Buff Selection4
                 if self.on_screen('Will_You_Buff'):
-                    self.click_element('ConfirmBuff')
+                    self.human_click('ConfirmBuff')
 
             case 9: # Starting Gift Selection
                 if self.on_screen('Starting_Gift'):
@@ -571,11 +586,11 @@ class MirrorDungeonRunner:
 
             case 10:
                 if self.on_screen('EGO_GIFT_GET'):
-                    self.click_element('EGOGift_Confirm')
+                    self.human_click('EGOGift_Confirm')
 
             case 11: # Pack Selection
                 if self.on_screen('Pack_Hard'):
-                    pyautogui.click(1363, 100)
+                    self.human_click(1363, 100)
                 self.move_to_element('Pack_Hanger')
                 pyautogui.dragRel(0, 500, 1)
 
@@ -590,7 +605,7 @@ class MirrorDungeonRunner:
                         time.sleep(random.uniform(0.1, 0.5))
                         x += 330
                         y -= 280
-                        pyautogui.click(x, y)
+                        self.human_click(x, y)
                         time.sleep(random.uniform(0.2, 0.5))
                         located = True
 
@@ -598,7 +613,7 @@ class MirrorDungeonRunner:
                 if located:
                     while not self.on_screen('Enter_Node'):
                         y += 300
-                        pyautogui.click(x, y)
+                        self.human_click(x, y)
                         time.sleep(random.uniform(0.25, 1.5))
                         failCounter += 1
                         if failCounter > 3:
@@ -614,21 +629,21 @@ class MirrorDungeonRunner:
 
             case 14: # Pre-fight Sinner Selection
                 if self.on_screen("Team_ClearSelection"):
-                    pyautogui.click(1715, 720)
+                    self.human_click(1715, 720)
                     time.sleep(random.uniform(0.5, 1.0))
-                    pyautogui.click(1145, 740)
+                    self.human_click(1145, 740)
                     time.sleep(random.uniform(0.5, 1.0))
 
                 for i in range(12):
-                    pyautogui.click(SINNER_COORDINATES[self.curTeam[i+2].lower()])
+                    self.human_click(SINNER_COORDINATES[self.curTeam[i+2].lower()])
                     time.sleep(random.uniform(0.3, 3.5))
 
                 time.sleep(random.uniform(0.25, 0.75))
-                pyautogui.click(1720,880)
+                self.human_click(1720,880)
                 time.sleep(random.uniform(0.5, 2))
 
             case 15: # OMG P-ENTER!!!
-                pyautogui.click(self.width / 2, self.height / 6)
+                self.human_click(self.width / 2, self.height / 6)
                 time.sleep(random.uniform(0.05, 0.25))
                 pyautogui.press('p')
                 time.sleep(random.uniform(0.05, 0.25))
@@ -636,51 +651,51 @@ class MirrorDungeonRunner:
 
             case 16: # Shop
                 self.do_shop()
-                self.click_element('Shop_Leave')
+                self.human_click('Shop_Leave')
 
             case 17: # Ego Gift Reward 1
-                if not self.click_element('Reward_EGOGIFT'):
-                    self.click_element('Reward_Cost')
+                if not self.human_click('Reward_EGOGIFT'):
+                    self.human_click('Reward_Cost')
                 time.sleep(random.uniform(0.5, 1.0))
-                pyautogui.click(1200, 800)
+                self.human_click(1200, 800)
 
             case 18: # Ego Gift Reward 2 (Acquire)
-                if not self.click_element('AcquireEGOGIFT'):
-                    self.click_element('Plus1')
+                if not self.human_click('AcquireEGOGIFT'):
+                    self.human_click('Plus1')
                 time.sleep(random.uniform(0.2, 1.5))
-                pyautogui.click(1705, 870)
+                self.human_click(1705, 870)
 
             case 19: # Collect Rewards Confirm (pass level up)
-                pyautogui.click(963, 700)
+                self.human_click(963, 700)
                 return False
 
             case 20: # End Victory
-                pyautogui.click(1671, 839)
+                self.human_click(1671, 839)
 
             case 21: # End Claim rewards 1
-                pyautogui.click(1150, 750)
+                self.human_click(1150, 750)
 
             case 22: # End claim rewards 2
-                pyautogui.click(1150, 750)
+                self.human_click(1150, 750)
 
             case 23: # End exploration reward
-                pyautogui.click(1330, 810)
+                self.human_click(1330, 810)
 
             case 24: # End exploration complete
-                pyautogui.click(1700, 900)
+                self.human_click(1700, 900)
 
             case 25: # Defeat Failsafe
                 while True:
                     if self.on_screen('End_Defeat'):
-                        pyautogui.click(1673, 840)
+                        self.human_click(1673, 840)
                     if self.on_screen('End_NoRewards'):
                         time.sleep(random.uniform(1.0, 2.5))
-                        pyautogui.click(1153, 740)
+                        self.human_click(1153, 740)
                         break
                     elif self.on_screen('End_ExplorationReward'):
-                        pyautogui.click(587, 814)
+                        self.human_click(587, 814)
                     elif self.on_screen('End_ExplorationComplete'):
-                        pyautogui.click(1700, 900)
+                        self.human_click(1700, 900)
                     time.sleep(random.uniform(0.1, 0.5))
         return True
 
