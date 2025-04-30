@@ -457,7 +457,6 @@ class MirrorDungeonRunner:
             if rest_bonus > maxBonus:
                 maxBonus = rest_bonus
 
-                # TODO : get rid of id int as the first item in the list
                 maxTeamRow = int(team[0])
                 self.curTeam = team
 
