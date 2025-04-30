@@ -20,7 +20,7 @@ Only really tested on 1920 x 1080p. There's some code to try and scale images an
 
 Clone the repo with `git clone https://github.com/LocandLoad/P-EnterBot`
 
-Download Python 3.12 >= if needed
+Download Python 3.12 or above if needed
 
 Install requirements `python3.12 -m pip install -r requirements.txt`
 
