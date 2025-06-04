@@ -2,4 +2,7 @@ TeamRow,Type,Sinner1,Sinner2,Sinner3,Sinner4,Sinner5,Sinner6,Sinner7,Sinner8,Sin
 1,Burn,Gregor,Outis,YiSang,Faust,Sinclair,Don,Ishmael,Meursault,HongLu,Ryoshu,Rodya,Heathcliff
 2,Bleed,Don,Rodya,Heathcliff,Ishmael,Outis,Gregor,YiSang,Ryoshu,Faust,Sinclair,Meursault,HongLu
 3,Charge,Ryoshu,Outis,Don,Heathcliff,Ishmael,Gregor,Sinclair,YiSang,Faust,Meursault,HongLu,Rodya
+4,Rupture,Ryoshu,Outis,Don,Rodya,Meursault,Faust,Heathcliff,HongLu,Sinclair,YiSang,Gregor,Ishmael
+6,Sinking,Outis,Gregor,YiSang,Meursault,Faust,Ishmael,Heathcliff,HongLu,Sinclair,Don,Rodya,Ryoshu
 7,Poise,Meursault,YiSang,HongLu,Faust,Don,Heathcliff,Outis,Sinclair,Gregor,Rodya,Ishmael,Ryoshu
+8,Tremor,Don,HongLu,Ishmael,Heathcliff,Rodya,Meursault,Outis,Faust,Sinclair,Gregor,Ryoshu,YiSang

@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from typing import Self
 
 import pyautogui
+import numpy as np
 
 from PIL import Image
 
@@ -182,6 +183,8 @@ class MirrorDungeonRunner:
 
         if self.resizing_needed:
 
+            logging.info(f'Alternative screen size ({self.height}, {self.width}) detected.')
+
             aspect_ratio: float = self.width / self.height
             if aspect_ratio != 16 / 9:
                 logging.warning(f'Aspect ratio is not 16:9, the program might not work very well. {aspect_ratio=}')
@@ -189,6 +192,8 @@ class MirrorDungeonRunner:
             self.scale_images()
 
     def scale_images(self) -> None:
+        logging.info("Scaling assets for new screen size.")
+
         # Make scaled images dir and wipe it
         os.makedirs('Scaled_Images/', exist_ok=True)
 
@@ -329,10 +334,12 @@ class MirrorDungeonRunner:
         elif type(x) == tuple:
             location = x
 
-        if type(x) == int:
-            if type(y) != int:
+        if type(x) == int or type(x) == np.int64:
+            if type(y) != int and type(y) != np.int64:
                 logging.error(f'Type of argument y should be int, not {type(y)}')
                 return False
+
+            logging.debug(f'moving mouse to {x=} {y=}')
 
             pyautogui.mouseDown(x, y)
         else:
@@ -611,6 +618,7 @@ class MirrorDungeonRunner:
                 failCounter = 0
                 if located:
                     while not self.on_screen('Enter_Node'):
+                        logging.debug(f'trying to enter node {x=} {y=}')
                         y += 300
                         self.human_click(x, y)
                         time.sleep(random.uniform(0.25, 1.5))
