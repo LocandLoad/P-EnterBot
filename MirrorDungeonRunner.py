@@ -46,7 +46,7 @@ GAME_ELEMENTS = {
     "Event_Skip" : GameElement(13, "Event_Skip.png"),
     "Team_Total_Participants" : GameElement(14, "Team_TotalParticipants.png", (1595,750,150,100)),
     "Battle_Winrate" : GameElement(15, "Battle_Winrate.png", (800,750,1120,200)),
-    "Shop_Refresh" : GameElement(-2, "Shop_Refresh.png", (1385,147,250,100)),
+    "Shop_Refresh" : GameElement(16, "Shop_Refresh.png", (1385,147,250,100)),
     "Select_Encounter_Reward" : GameElement(17, "Select_Encounter_Reward.png", (383, 148,850,150)),
     "RefuseGift" : GameElement(18, "RefuseGift.png", (1285,816,300,150)),
     "End_Passlvlup" : GameElement(19, "End_Passlvlup.png", (818,347,350,100)),
@@ -89,7 +89,7 @@ GAME_ELEMENTS = {
     "Event_CommenceBattle" : GameElement(-2, "Event_CommenceBattle.png", grayscale=False),
     "Team_ClearSelection" : GameElement(-2, "Team_ClearSelection.png", confidence=0.925, grayscale=False),
     "Shop_Item" : GameElement(-2, "Shop_Item.png", (1051,325,850,700), confidence=0.935),
-    "Shop_Leave" : GameElement(16, "Shop_Leave.png", grayscale=False),
+    "Shop_Leave" : GameElement(16, "Shop_Leave.png", grayscale=False, confidence=0.7),
     "Reward_EGOGIFT" : GameElement(-2, "Reward_EGOGIFT.png", grayscale=False),
     "Reward_Cost" : GameElement(-2, "Reward_Cost.png", grayscale=False),
     "AcquireEGOGIFT" : GameElement(-2, "AcquireEGOGIFT.png", confidence=0.9, grayscale=False),
@@ -560,7 +560,7 @@ class MirrorDungeonRunner:
                 continue
 
             for i in shopItems:
-                self.human_click(i)
+                pyautogui.click(i) # because i is probably a Box?
                 time.sleep(random.uniform(0.75, 3.0))
                 self.human_click(1120,712)
                 time.sleep(random.uniform(0.75, 1.75))
