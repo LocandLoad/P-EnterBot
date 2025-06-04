@@ -1,6 +1,7 @@
 import logging
 import random
 import time
+import math
 import csv
 import os
 
@@ -346,7 +347,7 @@ class MirrorDungeonRunner:
             pyautogui.mouseDown(location)
 
         # Average human click duration is 85ms, or 0.085s
-        time.sleep(random.gauss(0.085, 0.025))
+        time.sleep(min(max(random.gauss(0.085, 0.5), 0.05), 1))
         pyautogui.mouseUp()
 
         return True
