@@ -6,7 +6,7 @@ A program designed to run mirror dungeons in the hit Korean gacha game Limbus Co
 
 ## Features
 
- - Designed for Mirror Dungeon 5
+ - Designed for Mirror Dungeon 6
  - Picks team with best rest bonus
  - Configurable teams through TeamConfig.csv
 
