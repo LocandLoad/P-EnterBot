@@ -57,6 +57,7 @@ GAME_ELEMENTS = {
     "End_ExplorationReward" : GameElement(23, "End_ExplorationReward.png", (725,126,400,100)),
     "End_ExplorationComplete" : GameElement(24, "End_ExplorationComplete.png", (179,112,300,200)),
     "End_Defeat" : GameElement(25, "End_Defeat.png", (1475,192,300,150)),
+    "Team_TwelveOfTwelve" : GameElement(-2, "Team_TwelveOfTwelve.png", (1595,750,300,200)),
     "RestBonus_0" : GameElement(-2, "RestBonus_0.png", REST_BONUS_REGION, 0.95, False),
     "RestBonus_1" : GameElement(-2, "RestBonus_1.png", REST_BONUS_REGION, 0.9, False),
     "RestBonus_2" : GameElement(-2, "RestBonus_2.png", REST_BONUS_REGION, 0.9, False),
@@ -170,6 +171,8 @@ class MirrorDungeonRunner:
     image_dir: str = IMAGE_DIR
 
     curState: int = -1
+
+    teamSelected: bool = False
 
     def __init__(self, team_id: int | None = None) -> Self:
         self._get_screen_size()
@@ -511,6 +514,7 @@ class MirrorDungeonRunner:
         self.human_click(1620,870)
 
     def run_md(self) -> None:
+        self.teamSelected = False
         while True:
             self._neutralizeMousePos()
 
@@ -637,15 +641,18 @@ class MirrorDungeonRunner:
                 self.do_event()
 
             case 14: # Pre-fight Sinner Selection
-                if self.on_screen("Team_ClearSelection"):
-                    self.human_click(1715, 720)
-                    time.sleep(random.uniform(0.5, 1.0))
-                    self.human_click(1145, 740)
-                    time.sleep(random.uniform(0.5, 1.0))
+                if not self.teamSelected or not self.on_screen("Team_TwelveOfTwelve"):
+                    if self.on_screen("Team_ClearSelection"):
+                        self.human_click(1715, 720)
+                        time.sleep(random.uniform(0.5, 1.0))
+                        self.human_click(1145, 740)
+                        time.sleep(random.uniform(0.5, 1.0))
 
-                for i in range(12):
-                    self.human_click(SINNER_COORDINATES[self.curTeam[i+2].lower()])
-                    time.sleep(random.uniform(0.3, 1.5))
+                    for i in range(12):
+                        self.human_click(SINNER_COORDINATES[self.curTeam[i+2].lower()])
+                        time.sleep(random.uniform(0.3, 1.5))
+                    
+                    self.teamSelected = True
 
                 time.sleep(random.uniform(0.25, 0.75))
                 self.human_click(1720,880)
