@@ -93,6 +93,7 @@ GAME_ELEMENTS = {
     "Shop_Leave" : GameElement(16, "Shop_Leave.png", grayscale=False, confidence=0.7),
     "Reward_EGOGIFT" : GameElement(-2, "Reward_EGOGIFT.png", grayscale=False),
     "Reward_Cost" : GameElement(-2, "Reward_Cost.png", grayscale=False),
+    "Reward_Starlight" : GameElement(-2, "Reward_Starlight.png", grayscale=False),
     "AcquireEGOGIFT" : GameElement(-2, "AcquireEGOGIFT.png", confidence=0.9, grayscale=False),
     "Plus1" : GameElement(-2, "Plus1.png", confidence=0.95, grayscale=False),
     "End_NoRewards" : GameElement(-2, "End_NoRewards.png", grayscale=False),
@@ -663,7 +664,8 @@ class MirrorDungeonRunner:
 
             case 17: # Ego Gift Reward 1
                 if not self.human_click('Reward_EGOGIFT'):
-                    self.human_click('Reward_Cost')
+                    if not self.human_click('Reward_Cost'):
+                        self.human_click('Reward_Starlight')
                 time.sleep(random.uniform(0.5, 1.0))
                 self.human_click(1200, 800)
 
