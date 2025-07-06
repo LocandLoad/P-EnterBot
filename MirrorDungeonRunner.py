@@ -33,13 +33,13 @@ REST_BONUS_REGION = (1750,780,60,60)
 GAME_ELEMENTS = {
     "ClearAllCaches" : GameElement(0, "ClearAllCaches.png", (285, 950, 250, 100)),
     "Drive" : GameElement(1, "Drive.png", (1236, 907, 150, 150), 0.75),
-    "MD5Button" : GameElement(2, "MD5Button.png", (520,351,300,250)),
-    "MD5StartButton" : GameElement(3, "MD5StartButton.png", (715,255,550,650), 0.6),
+    "MD6Button" : GameElement(2, "MD6Button.png", (520,351,300,250)),
+    "MD6StartButton" : GameElement(3, "MD6StartButton.png", (715,255,550,650), 0.6),
     "EnterMD5" : GameElement(4, "EnterMD5.png", (960,690,400,100)),
-    "RestBonus" : GameElement(5, "RestBonus.png", (1620,784,150,100), 0.75),
+    "StarlightBonus" : GameElement(5, "StarlightBonus.png", (1600,770,300,250), 0.75),
     "DungeonProgress" : GameElement(6, "DungeonProgress.png", (812,325,300,100), 0.75),
     "Starlight_Guidance" : GameElement(7, "Starlight_Guidance.png", (828,579,350,200), 0.75),
-    "Will_You_Buff" : GameElement(8, "Will_You_Buff.png", (760,293,450,100), 0.75),
+    "Will_You_Buff" : GameElement(8, "Will_You_Buff.png", (750,280,550,100), 0.75),
     "Starting_Gift" : GameElement(9, "Starting_Gift.png", (1100,150,600,300)),
     "EGO_GIFT_GET" : GameElement(10, "EGO_GIFT_GET.png", (817,249,350,100)),
     "Theme_Pack" : GameElement(11, "Theme_Pack.png", (967,150,250,100)),
@@ -68,7 +68,7 @@ GAME_ELEMENTS = {
     "RestBonus_8" : GameElement(-2, "RestBonus_8.png", REST_BONUS_REGION, 0.95, False),
     "RestBonus_9" : GameElement(-2, "RestBonus_9.png", REST_BONUS_REGION, 0.9, False),
     "ResumeMD5" : GameElement(-2, "ResumeMD5.png", (781,566,400,100)),
-    "Teams" : GameElement(-2, "Teams.png", (72,527,200,100)),
+    "Teams" : GameElement(-2, "Teams.png", (143,411,200,100)),
     "ConfirmTeam" : GameElement(-2, "ConfirmTeam.png"),
     "ConfirmBuff" : GameElement(-2, "ConfirmBuff.png"),
     "EGOGift_Confirm" : GameElement(-2, "EGOGift_Confirm.png", grayscale=False),
@@ -88,7 +88,7 @@ GAME_ELEMENTS = {
     "Event_Continue" : GameElement(-2, "Event_Continue.png", grayscale=False),
     "Event_Proceed" : GameElement(-2, "Event_Proceed.png", grayscale=False),
     "Event_CommenceBattle" : GameElement(-2, "Event_CommenceBattle.png", grayscale=False),
-    "Team_ClearSelection" : GameElement(-2, "Team_ClearSelection.png", confidence=0.925, grayscale=False),
+    "Team_ClearSelection" : GameElement(-2, "Team_ClearSelection.png", (1592,692,300,100), confidence=0.925, grayscale=False),
     "Shop_Item" : GameElement(-2, "Shop_Item.png", (1051,325,850,700), confidence=0.935),
     "Shop_Leave" : GameElement(16, "Shop_Leave.png", grayscale=False, confidence=0.7),
     "Reward_EGOGIFT" : GameElement(-2, "Reward_EGOGIFT.png", grayscale=False),
@@ -109,9 +109,9 @@ GAME_ELEMENTS = {
 BASE_STATES = [
     "ClearAllCaches",
     "Drive",
-    "MD5StartButton",
+    "MD6StartButton",
     "EnterMD5",
-    "RestBonus",
+    "StarlightBonus",
     "DungeonProgress",
     "Starlight_Guidance",
     "Will_You_Buff",
@@ -371,7 +371,7 @@ class MirrorDungeonRunner:
 
             if self.on_screen(game_element):
                 if game_element.id == 1: # aka it's the drive button
-                    if self.on_screen('MD5Button'):
+                    if self.on_screen('MD6Button'):
                         return 2
 
                 return game_element.id
@@ -392,9 +392,9 @@ class MirrorDungeonRunner:
                 case 1:
                     self.human_click('Drive')
                 case 2:
-                    self.human_click('MD5Button')
+                    self.human_click('MD6Button')
                 case 3:
-                    self.human_click(GameElement(3, "MD5StartButton.png", (715,255,550,650), 0.2))
+                    self.human_click(GameElement(3, "MD6StartButton.png", (715,255,550,650), 0.2))
                 case 4:
                     self.human_click('EnterMD5')
                 case 6:
