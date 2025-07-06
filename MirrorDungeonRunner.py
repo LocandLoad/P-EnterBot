@@ -1,6 +1,7 @@
 import logging
 import random
 import time
+import math
 import csv
 import os
 
@@ -8,6 +9,7 @@ from dataclasses import dataclass
 from typing import Self
 
 import pyautogui
+import numpy as np
 
 from PIL import Image
 
@@ -45,7 +47,7 @@ GAME_ELEMENTS = {
     "Event_Skip" : GameElement(13, "Event_Skip.png"),
     "Team_Total_Participants" : GameElement(14, "Team_TotalParticipants.png", (1595,750,150,100)),
     "Battle_Winrate" : GameElement(15, "Battle_Winrate.png", (800,750,1120,200)),
-    "Shop_Refresh" : GameElement(-2, "Shop_Refresh.png", (1385,147,250,100)),
+    "Shop_Refresh" : GameElement(16, "Shop_Refresh.png", (1385,147,250,100)),
     "Select_Encounter_Reward" : GameElement(17, "Select_Encounter_Reward.png", (383, 148,850,150)),
     "RefuseGift" : GameElement(18, "RefuseGift.png", (1285,816,300,150)),
     "End_Passlvlup" : GameElement(19, "End_Passlvlup.png", (818,347,350,100)),
@@ -88,7 +90,7 @@ GAME_ELEMENTS = {
     "Event_CommenceBattle" : GameElement(-2, "Event_CommenceBattle.png", grayscale=False),
     "Team_ClearSelection" : GameElement(-2, "Team_ClearSelection.png", confidence=0.925, grayscale=False),
     "Shop_Item" : GameElement(-2, "Shop_Item.png", (1051,325,850,700), confidence=0.935),
-    "Shop_Leave" : GameElement(16, "Shop_Leave.png", grayscale=False),
+    "Shop_Leave" : GameElement(16, "Shop_Leave.png", grayscale=False, confidence=0.7),
     "Reward_EGOGIFT" : GameElement(-2, "Reward_EGOGIFT.png", grayscale=False),
     "Reward_Cost" : GameElement(-2, "Reward_Cost.png", grayscale=False),
     "AcquireEGOGIFT" : GameElement(-2, "AcquireEGOGIFT.png", confidence=0.9, grayscale=False),
@@ -182,6 +184,8 @@ class MirrorDungeonRunner:
 
         if self.resizing_needed:
 
+            logging.info(f'Alternative screen size ({self.height}, {self.width}) detected.')
+
             aspect_ratio: float = self.width / self.height
             if aspect_ratio != 16 / 9:
                 logging.warning(f'Aspect ratio is not 16:9, the program might not work very well. {aspect_ratio=}')
@@ -189,6 +193,8 @@ class MirrorDungeonRunner:
             self.scale_images()
 
     def scale_images(self) -> None:
+        logging.info("Scaling assets for new screen size.")
+
         # Make scaled images dir and wipe it
         os.makedirs('Scaled_Images/', exist_ok=True)
 
@@ -329,17 +335,19 @@ class MirrorDungeonRunner:
         elif type(x) == tuple:
             location = x
 
-        if type(x) == int:
-            if type(y) != int:
+        if type(x) == int or type(x) == np.int64:
+            if type(y) != int and type(y) != np.int64:
                 logging.error(f'Type of argument y should be int, not {type(y)}')
                 return False
+
+            logging.debug(f'moving mouse to {x=} {y=}')
 
             pyautogui.mouseDown(x, y)
         else:
             pyautogui.mouseDown(location)
 
         # Average human click duration is 85ms, or 0.085s
-        time.sleep(random.gauss(0.085, 0.025))
+        time.sleep(min(max(random.gauss(0.085, 0.5), 0.05), 0.1))
         pyautogui.mouseUp()
 
         return True
@@ -553,7 +561,7 @@ class MirrorDungeonRunner:
                 continue
 
             for i in shopItems:
-                self.human_click(i)
+                pyautogui.click(i) # because i is probably a Box?
                 time.sleep(random.uniform(0.75, 3.0))
                 self.human_click(1120,712)
                 time.sleep(random.uniform(0.75, 1.75))
@@ -611,6 +619,7 @@ class MirrorDungeonRunner:
                 failCounter = 0
                 if located:
                     while not self.on_screen('Enter_Node'):
+                        logging.debug(f'trying to enter node {x=} {y=}')
                         y += 300
                         self.human_click(x, y)
                         time.sleep(random.uniform(0.25, 1.5))
@@ -635,7 +644,7 @@ class MirrorDungeonRunner:
 
                 for i in range(12):
                     self.human_click(SINNER_COORDINATES[self.curTeam[i+2].lower()])
-                    time.sleep(random.uniform(0.3, 3.5))
+                    time.sleep(random.uniform(0.3, 1.5))
 
                 time.sleep(random.uniform(0.25, 0.75))
                 self.human_click(1720,880)
