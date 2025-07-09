@@ -10,6 +10,7 @@ from typing import Self
 
 import pyautogui
 import numpy as np
+import pyscreeze
 
 from PIL import Image
 
@@ -30,6 +31,19 @@ class GameElement:
 
 REST_BONUS_REGION = (1750,780,60,60)
 
+NODE1PATHPIXELS = ((825,430),(829,326),(815,526))
+NODE2PATHPIXELS = ((1220,111),(1220,226))
+NODE3PATHPIXELS = ((1247,433),(1214,323),(1201,529))
+NODE4PATHPIXELS = ((1229,754),(1267,635))
+NODEPATHSEARCHNEAR = (825,430)
+NODEPATHSEARCHFAR = (1247,433)
+NODE2REGION = (990,70,250,250)
+NODE3REGION = (992,368,250,250)
+NODE4REGION = (990,716,250,250)
+NODE5REGION = (1385,70,250,250)
+NODE6REGION = (1385,368,250,250)
+NODE7REGION = (1385,716,250,250)
+
 GAME_ELEMENTS = {
     "ClearAllCaches" : GameElement(0, "ClearAllCaches.png", (285, 950, 250, 100)),
     "Drive" : GameElement(1, "Drive.png", (1236, 907, 150, 150), 0.75),
@@ -43,6 +57,7 @@ GAME_ELEMENTS = {
     "Starting_Gift" : GameElement(9, "Starting_Gift.png", (1100,150,600,300)),
     "EGO_GIFT_GET" : GameElement(10, "EGO_GIFT_GET.png", (817,249,350,100)),
     "Theme_Pack" : GameElement(11, "Theme_Pack.png", (967,150,250,100)),
+    "SelectEventEffect" : GameElement(26, "SelectEventEffect.png", (564,200,900,300)),
     "NodeSelect" : GameElement(12, "NodeSelect.png", (1802,115,100,100), 0.9),
     "Event_Skip" : GameElement(13, "Event_Skip.png"),
     "Team_Total_Participants" : GameElement(14, "Team_TotalParticipants.png", (1595,750,150,100)),
@@ -104,7 +119,9 @@ GAME_ELEMENTS = {
     "Rest2" : GameElement(-2, "Rest2.png", confidence=0.97, grayscale=False),
     "Rest3" : GameElement(-2, "Rest3.png", confidence=0.97, grayscale=False),
     "Rest4" : GameElement(-2, "Rest4.png", confidence=0.97, grayscale=False),
-    "Rest5" : GameElement(-2, "Rest5.png", confidence=0.955, grayscale=False)
+    "Rest5" : GameElement(-2, "Rest5.png", confidence=0.955, grayscale=False),
+    "Relief" : GameElement(-2, "Relief.png", confidence = 0.9, grayscale = False),
+    "ConfirmEventEffect" : GameElement(-2, "ConfirmEventEffect.png", confidence = 0.9, grayscale = False)
 }
 
 
@@ -120,6 +137,7 @@ BASE_STATES = [
     "Starting_Gift",
     "EGO_GIFT_GET",
     "Theme_Pack",
+    "SelectEventEffect",
     "NodeSelect",
     "Event_Skip",
     "Team_Total_Participants",
@@ -173,6 +191,10 @@ class MirrorDungeonRunner:
     curState: int = -1
 
     teamSelected: bool = False
+
+    reselectNodePathColors: bool = True
+    nodePathColorNear: tuple
+    nodePathColorFar: tuple
 
     def __init__(self, team_id: int | None = None) -> Self:
         self._get_screen_size()
@@ -327,7 +349,7 @@ class MirrorDungeonRunner:
             return None
 
     # Disgusting method, but it needs all these types to match normal pyautogui.click() functionality
-    def human_click(self, x: GameElement | str | tuple | int | None = None, y: int | None = None) -> bool:
+    def human_click(self, x: GameElement | str | tuple | pyscreeze.Point | int | None = None, y: int | None = None) -> bool:
         if type(x) == str:
             x = GAME_ELEMENTS[x]
 
@@ -337,6 +359,8 @@ class MirrorDungeonRunner:
             if not location:
                 return False
         elif type(x) == tuple:
+            location = x
+        elif type(x) == pyscreeze.Point:
             location = x
 
         if type(x) == int or type(x) == np.int64:
@@ -576,6 +600,87 @@ class MirrorDungeonRunner:
         self.human_click('Shop_Leave')
         time.sleep(random.uniform(0.5, 2.0))
         self.human_click(1171,743)
+    
+    def node_pathfind(self) -> bool:
+        nodeScores = [0,0,0]
+        tempScore = 0
+        maxScore = 0
+        maxScoreNode = 0
+        if pyautogui.pixelMatchesColor(NODE1PATHPIXELS[0][0],NODE1PATHPIXELS[0][1],self.nodePathColorNear, tolerance = 10):
+            nodeScores[0] = self.get_node_rating(NODE3REGION)
+            tempScore = nodeScores[0]
+            if pyautogui.pixelMatchesColor(NODE3PATHPIXELS[0][0],NODE3PATHPIXELS[0][1],self.nodePathColorFar, tolerance = 10):
+                if tempScore < nodeScores[0] + self.get_node_rating(NODE6REGION):
+                    tempScore = nodeScores[0] + self.get_node_rating(NODE6REGION)
+            if pyautogui.pixelMatchesColor(NODE3PATHPIXELS[1][0],NODE3PATHPIXELS[1][1],self.nodePathColorFar, tolerance = 10):
+                if tempScore < nodeScores[0] + self.get_node_rating(NODE5REGION):
+                    tempScore = nodeScores[0] + self.get_node_rating(NODE5REGION)
+            if pyautogui.pixelMatchesColor(NODE3PATHPIXELS[2][0],NODE3PATHPIXELS[2][1],self.nodePathColorFar, tolerance = 10):
+                if tempScore < nodeScores[0] + self.get_node_rating(NODE7REGION):
+                    tempScore = nodeScores[0] + self.get_node_rating(NODE7REGION)
+            nodeScores[0] = tempScore
+            if maxScore < nodeScores[0]:
+                maxScore = nodeScores[0]
+                maxScoreNode = 3
+        
+        if pyautogui.pixelMatchesColor(NODE1PATHPIXELS[1][0],NODE1PATHPIXELS[1][1],self.nodePathColorNear, tolerance = 10):
+            nodeScores[1] = self.get_node_rating(NODE2REGION)
+            tempScore = nodeScores[1]
+            if pyautogui.pixelMatchesColor(NODE2PATHPIXELS[0][0],NODE2PATHPIXELS[0][1],self.nodePathColorFar, tolerance = 10):
+                if tempScore < nodeScores[1] + self.get_node_rating(NODE5REGION):
+                    tempScore = nodeScores[1] + self.get_node_rating(NODE5REGION)
+            if pyautogui.pixelMatchesColor(NODE2PATHPIXELS[1][0],NODE2PATHPIXELS[1][1],self.nodePathColorFar, tolerance = 10):
+                if tempScore < nodeScores[1] + self.get_node_rating(NODE6REGION):
+                    tempScore = nodeScores[1] + self.get_node_rating(NODE6REGION)
+            nodeScores[1] = tempScore
+            if maxScore < nodeScores[1]:
+                maxScore = nodeScores[1]
+                maxScoreNode = 2
+        
+        if pyautogui.pixelMatchesColor(NODE1PATHPIXELS[2][0],NODE1PATHPIXELS[2][1],self.nodePathColorNear, tolerance = 10):
+            nodeScores[2] = self.get_node_rating(NODE4REGION)
+            tempScore = nodeScores[2]
+            if pyautogui.pixelMatchesColor(NODE4PATHPIXELS[0][0],NODE4PATHPIXELS[0][1],self.nodePathColorFar, tolerance = 10):
+                if tempScore < nodeScores[2] + self.get_node_rating(NODE6REGION):
+                    tempScore = nodeScores[2] + self.get_node_rating(NODE6REGION)
+            if pyautogui.pixelMatchesColor(NODE4PATHPIXELS[1][0],NODE4PATHPIXELS[1][1],self.nodePathColorFar, tolerance = 10):
+                if tempScore < nodeScores[2] + self.get_node_rating(NODE7REGION):
+                    tempScore = nodeScores[2] + self.get_node_rating(NODE7REGION)
+            nodeScores[2] = tempScore
+            if maxScore < nodeScores[2]:
+                maxScore = nodeScores[2]
+                maxScoreNode = 4
+        print(maxScoreNode)
+
+        match maxScoreNode:
+            case 3:
+                self.human_click(pyautogui.center(NODE3REGION))
+                return True
+            case 2:
+                self.human_click(pyautogui.center(NODE2REGION))
+                return True
+            case 4:
+                self.human_click(pyautogui.center(NODE4REGION))
+                return True
+
+        
+        return False
+
+    
+    def get_node_rating(self, region: tuple) -> int:
+        if self.on_screen(GameElement(-2, "Node_Event.png", region, grayscale = True)):
+            return 4
+        if self.on_screen(GameElement(-2, "Node_EventFar.png", region, grayscale = True)):
+            return 4
+        if self.on_screen(GameElement(-2, "Node_Midboss.png", region, grayscale = True)):
+            return 3
+        if self.on_screen(GameElement(-2, "Node_MidbossFar.png", region, grayscale = True)):
+            return 3
+        if self.on_screen(GameElement(-2, "Node_Combat.png", region, grayscale = True)):
+            return 2
+        if self.on_screen(GameElement(-2, "Node_CombatFar.png", region, grayscale = True)):
+            return 2
+        return 1
 
     # Main MD Logic Loop
     def process_state(self) -> bool:
@@ -584,11 +689,11 @@ class MirrorDungeonRunner:
                 if self.on_screen('Teams'):
                     self.selectTeam()
 
-            case 7: # MD5 Buff Selection
+            case 7: # MD6 Buff Selection
                 if self.on_screen('Starlight_Guidance'):
                     self.selectBuffs()
 
-            case 8: # End Buff Selection4
+            case 8: # End Buff Selection
                 if self.on_screen('Will_You_Buff'):
                     self.human_click('ConfirmBuff')
 
@@ -605,34 +710,40 @@ class MirrorDungeonRunner:
                     self.human_click(1363, 100)
                 self.move_to_element('Pack_Hanger')
                 pyautogui.dragRel(0, 500, 1)
+                reselectNodePathColros = True
 
             case 12: # Node Selection
-                located = False
-                if self.on_screen('Clock_Face'):
-                    time.sleep(random.uniform(0.5, 1.5))
-                    coords: tuple = self.locate_on_screen('Clock_Face')
-                    if coords:
-                        x, y = pyautogui.center(coords)
-                        pyautogui.moveTo(x, y)
-                        time.sleep(random.uniform(0.1, 0.5))
-                        x += 330
-                        y -= 280
-                        self.human_click(x, y)
-                        time.sleep(random.uniform(0.2, 0.5))
-                        located = True
+                if (self.reselectNodePathColors):
+                    self.nodePathColorNear = pyautogui.pixel(NODEPATHSEARCHNEAR[0],NODEPATHSEARCHNEAR[1])
+                    self.nodePathColorFar = pyautogui.pixel(NODEPATHSEARCHFAR[0],NODEPATHSEARCHFAR[1])
+                    self.reselectNodePathColors = False
+                if (not self.node_pathfind()):
+                    located = False
+                    if self.on_screen('Clock_Face'):
+                        time.sleep(random.uniform(0.5, 1.5))
+                        coords: tuple = self.locate_on_screen('Clock_Face')
+                        if coords:
+                            x, y = pyautogui.center(coords)
+                            pyautogui.moveTo(x, y)
+                            time.sleep(random.uniform(0.1, 0.5))
+                            x += 330
+                            y -= 280
+                            self.human_click(x, y)
+                            time.sleep(random.uniform(0.2, 0.5))
+                            located = True
 
-                failCounter = 0
-                if located:
-                    while not self.on_screen('Enter_Node'):
-                        logging.debug(f'trying to enter node {x=} {y=}')
-                        y += 300
-                        self.human_click(x, y)
-                        time.sleep(random.uniform(0.25, 1.5))
-                        failCounter += 1
-                        if failCounter > 3:
-                            break
-                    time.sleep(random.uniform(0.35, 1.0))
-                    pyautogui.press('enter')
+                    failCounter = 0
+                    if located:
+                        while not self.on_screen('Enter_Node'):
+                            logging.debug(f'trying to enter node {x=} {y=}')
+                            y += 300
+                            self.human_click(x, y)
+                            time.sleep(random.uniform(0.25, 1.5))
+                            failCounter += 1
+                            if failCounter > 3:
+                                break
+                        time.sleep(random.uniform(0.35, 1.0))
+                        pyautogui.press('enter')
 
                 if self.on_screen('Enter_Node'):
                     pyautogui.press('enter')
@@ -714,6 +825,10 @@ class MirrorDungeonRunner:
                     elif self.on_screen('End_ExplorationComplete'):
                         self.human_click(1700, 900)
                     time.sleep(random.uniform(0.1, 0.5))
+            case 26:
+                self.human_click("Relief");
+                time.sleep(random.uniform(0.1,0.5))
+                self.human_click("ConfirmEventEffect")
         return True
 
 
