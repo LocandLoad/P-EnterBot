@@ -49,7 +49,8 @@ GAME_ELEMENTS = {
     "Drive" : GameElement(1, "Drive.png", (1236, 907, 150, 150), 0.75),
     "MD6Button" : GameElement(2, "MD6Button.png", (520,351,300,250)),
     "MD6StartButton" : GameElement(3, "MD6StartButton.png", (715,255,550,650), 0.6),
-    "EnterMD5" : GameElement(4, "EnterMD5.png", (960,690,400,100)),
+    "EnterMD" : GameElement(4, "EnterMD.png", (960,690,400,100)),
+    "LowLevelCheck" : GameElement(27, "LowLevelCheck.png", (641,351,650,150)),
     "StarlightBonus" : GameElement(5, "StarlightBonus.png", (1600,770,300,250), 0.75),
     "DungeonProgress" : GameElement(6, "DungeonProgress.png", (812,325,300,100), 0.75),
     "Starlight_Guidance" : GameElement(7, "Starlight_Guidance.png", (828,579,350,200), 0.75),
@@ -57,7 +58,7 @@ GAME_ELEMENTS = {
     "Starting_Gift" : GameElement(9, "Starting_Gift.png", (1100,150,600,300)),
     "EGO_GIFT_GET" : GameElement(10, "EGO_GIFT_GET.png", (817,249,350,100)),
     "Theme_Pack" : GameElement(11, "Theme_Pack.png", (967,150,250,100)),
-    "SelectEventEffect" : GameElement(26, "SelectEventEffect.png", (564,200,900,300)),
+    "SelectEventEffect" : GameElement(26, "SelectEventEffect.png", (564,200,900,300)), #rare occurence of multiple event status effects
     "NodeSelect" : GameElement(12, "NodeSelect.png", (1802,115,100,100), 0.9),
     "Event_Skip" : GameElement(13, "Event_Skip.png"),
     "Team_Total_Participants" : GameElement(14, "Team_TotalParticipants.png", (1595,750,150,100)),
@@ -121,7 +122,8 @@ GAME_ELEMENTS = {
     "Rest4" : GameElement(-2, "Rest4.png", confidence=0.97, grayscale=False),
     "Rest5" : GameElement(-2, "Rest5.png", confidence=0.955, grayscale=False),
     "Relief" : GameElement(-2, "Relief.png", confidence = 0.9, grayscale = False),
-    "ConfirmEventEffect" : GameElement(-2, "ConfirmEventEffect.png", confidence = 0.9, grayscale = False)
+    "ConfirmEventEffect" : GameElement(-2, "ConfirmEventEffect.png", confidence = 0.9, grayscale = False),
+    "LowLevelConfirm" : GameElement(-2, "LowLevelConfirm.png", (974,700,400,150), confidence = 0.8, grayscale = False)
 }
 
 
@@ -129,7 +131,8 @@ BASE_STATES = [
     "ClearAllCaches",
     "Drive",
     "MD6StartButton",
-    "EnterMD5",
+    "EnterMD",
+    "LowLevelCheck",
     "StarlightBonus",
     "DungeonProgress",
     "Starlight_Guidance",
@@ -424,7 +427,7 @@ class MirrorDungeonRunner:
                 case 3:
                     self.human_click(GameElement(3, "MD6StartButton.png", (715,255,550,650), 0.2))
                 case 4:
-                    self.human_click('EnterMD5')
+                    self.human_click('EnterMD')
                 case 6:
                     self.human_click('ResumeMD5')
                 case -1:
@@ -438,7 +441,7 @@ class MirrorDungeonRunner:
         self.human_click(1250,280)
         self.human_click(400,400)
         self.human_click(700,400)
-        self.human_click(1706,991)
+        self.human_click(1756,991)
 
     def get_rest_bonus(self) -> int:
         rest_bonus = 0
@@ -829,6 +832,9 @@ class MirrorDungeonRunner:
                 self.human_click("Relief");
                 time.sleep(random.uniform(0.1,0.5))
                 self.human_click("ConfirmEventEffect")
+            case 27:
+                self.human_click("LowLevelConfirm")
+                time.sleep(1)
         return True
 
 
