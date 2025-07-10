@@ -713,7 +713,7 @@ class MirrorDungeonRunner:
                     self.human_click(1363, 100)
                 self.move_to_element('Pack_Hanger')
                 pyautogui.dragRel(0, 500, 1)
-                reselectNodePathColros = True
+                reselectNodePathColors = True
 
             case 12: # Node Selection
                 if (self.reselectNodePathColors):
