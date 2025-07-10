@@ -26,6 +26,8 @@ def main():
     runs = 0
     if not args.runs:
         user_input: str = pyautogui.prompt(text = "Enter number of MD runs", title = "StartMenu", default = 1)
+        if not user_input:
+            return 0
         if not user_input.isnumeric():
             print("Number of runs must be integer")
             exit(1)

@@ -31,6 +31,7 @@ class GameElement:
 
 REST_BONUS_REGION = (1750,780,60,60)
 
+#Pathfinding coords and regions
 NODE1PATHPIXELS = ((825,430),(829,326),(815,526))
 NODE2PATHPIXELS = ((1220,111),(1220,226))
 NODE3PATHPIXELS = ((1247,433),(1214,323),(1201,529))
@@ -50,7 +51,6 @@ GAME_ELEMENTS = {
     "MD6Button" : GameElement(2, "MD6Button.png", (520,351,300,250)),
     "MD6StartButton" : GameElement(3, "MD6StartButton.png", (715,255,550,650), 0.6),
     "EnterMD" : GameElement(4, "EnterMD.png", (960,690,400,100)),
-    "LowLevelCheck" : GameElement(27, "LowLevelCheck.png", (641,351,650,150)),
     "StarlightBonus" : GameElement(5, "StarlightBonus.png", (1600,770,300,250), 0.75),
     "DungeonProgress" : GameElement(6, "DungeonProgress.png", (812,325,300,100), 0.75),
     "Starlight_Guidance" : GameElement(7, "Starlight_Guidance.png", (828,579,350,200), 0.75),
@@ -58,7 +58,6 @@ GAME_ELEMENTS = {
     "Starting_Gift" : GameElement(9, "Starting_Gift.png", (1100,150,600,300)),
     "EGO_GIFT_GET" : GameElement(10, "EGO_GIFT_GET.png", (817,249,350,100)),
     "Theme_Pack" : GameElement(11, "Theme_Pack.png", (967,150,250,100)),
-    "SelectEventEffect" : GameElement(26, "SelectEventEffect.png", (564,200,900,300)), #rare occurence of multiple event status effects
     "NodeSelect" : GameElement(12, "NodeSelect.png", (1802,115,100,100), 0.9),
     "Event_Skip" : GameElement(13, "Event_Skip.png"),
     "Team_Total_Participants" : GameElement(14, "Team_TotalParticipants.png", (1595,750,150,100)),
@@ -73,6 +72,10 @@ GAME_ELEMENTS = {
     "End_ExplorationReward" : GameElement(23, "End_ExplorationReward.png", (725,126,400,100)),
     "End_ExplorationComplete" : GameElement(24, "End_ExplorationComplete.png", (179,112,300,200)),
     "End_Defeat" : GameElement(25, "End_Defeat.png", (1475,192,300,150)),
+    "SelectEventEffect" : GameElement(26, "SelectEventEffect.png", (564,200,900,300)), #rare occurence of multiple event status effects
+    "LowLevelCheck" : GameElement(27, "LowLevelCheck.png", (641,351,650,150)),
+    "WeeklyBonusEligible" : GameElement(28, "WeeklyBonusEligible.png", (591,373,900,400)),
+    "WeeklyBonusSpend" : GameElement(29, "WeeklyBonusSpend.png", (625,421,900,300)),
     "Team_TwelveOfTwelve" : GameElement(-2, "Team_TwelveOfTwelve.png", (1595,750,300,200)),
     "RestBonus_0" : GameElement(-2, "RestBonus_0.png", REST_BONUS_REGION, 0.95, False),
     "RestBonus_1" : GameElement(-2, "RestBonus_1.png", REST_BONUS_REGION, 0.9, False),
@@ -95,6 +98,7 @@ GAME_ELEMENTS = {
     "Enter_Node" : GameElement(-2, "Enter_Node.png", confidence=0.9, grayscale=False),
     "Event_Choices" : GameElement(-2, "Event_Choices.png", grayscale=False),
     "Event_EGOGIFT" : GameElement(-2, "Event_EGOGIFT.png", confidence=0.7, grayscale=False),
+    "Event_LevelUp" : GameElement(-2, "Event_LevelUp.png", confidence = 0.7, grayscale=False),
     "Event_Predicted" : GameElement(-2, "Event_Predicted.png", grayscale=False),
     "Event_VeryHigh" : GameElement(-2, "Event_VeryHigh.png", confidence=0.7, grayscale=False),
     "Event_High" : GameElement(-2, "Event_High.png", confidence=0.7, grayscale=False),
@@ -123,7 +127,16 @@ GAME_ELEMENTS = {
     "Rest5" : GameElement(-2, "Rest5.png", confidence=0.955, grayscale=False),
     "Relief" : GameElement(-2, "Relief.png", confidence = 0.9, grayscale = False),
     "ConfirmEventEffect" : GameElement(-2, "ConfirmEventEffect.png", confidence = 0.9, grayscale = False),
-    "LowLevelConfirm" : GameElement(-2, "LowLevelConfirm.png", (974,700,400,150), confidence = 0.8, grayscale = False)
+    "LowLevelConfirm" : GameElement(-2, "LowLevelConfirm.png", (974,700,400,150), confidence = 0.8, grayscale = False),
+    "TwoOfTwo" : GameElement(-2, "TwoOfTwo.png", confidence = 0.9, grayscale = False),
+    "AcquireUnownedEGOGIFT" : GameElement(-2, "AcquireUnownedEGOGIFT.png", confidence=0.9, grayscale=False),
+    "AcquireEGOSelect" : GameElement(-2, "AcquireEGOSelect.png", confidence=0.9, grayscale=False),
+    "WeeklyBonusButtonOn1" : GameElement(-2, "WeeklyBonusOn.png", (893,363,150,50), confidence =0.9, grayscale=False),
+    "WeeklyBonusButtonOn2" : GameElement(-2, "WeeklyBonusOn.png", (1055,363,150,50), confidence =0.9, grayscale=False),
+    "WeeklyBonusButtonOn3" : GameElement(-2, "WeeklyBonusOn.png", (1218,363,150,50), confidence =0.9, grayscale=False),
+    "WeeklyBonusButtonOff1" : GameElement(-2, "WeeklyBonusOff.png", (893,363,150,50), confidence =0.9, grayscale=False),
+    "WeeklyBonusButtonOff2" : GameElement(-2, "WeeklyBonusOff.png", (1055,363,150,50), confidence =0.9, grayscale=False),
+    "WeeklyBonusButtonOff3" : GameElement(-2, "WeeklyBonusOff.png", (1218,363,150,50), confidence =0.9, grayscale=False)
 }
 
 
@@ -150,6 +163,8 @@ BASE_STATES = [
     "RefuseGift",
     "End_Passlvlup",
     "End_Victory",
+    "WeeklyBonusEligible",
+    "WeeklyBonusSpend",
     "End_ClaimTheRewards",
     "End_ClaimTheRewards1",
     "End_ExplorationReward",
@@ -194,10 +209,13 @@ class MirrorDungeonRunner:
     curState: int = -1
 
     teamSelected: bool = False
-
+    
     reselectNodePathColors: bool = True
     nodePathColorNear: tuple
     nodePathColorFar: tuple
+
+    hardMode: bool = True
+    weeklyBonusIndividual: bool = True
 
     def __init__(self, team_id: int | None = None) -> Self:
         self._get_screen_size()
@@ -561,10 +579,11 @@ class MirrorDungeonRunner:
 
     def do_event(self) -> None:
         if self.on_screen('Event_Choices'):
-            if not self.human_click('Event_EGOGIFT'):
-                self.human_click(1366, 350)
-                self.human_click(1366, 600)
-                self.human_click(1366, 750)
+            if not self.human_click('Event_LevelUp'):
+                if not self.human_click('Event_EGOGIFT'):
+                    self.human_click(1366, 350)
+                    self.human_click(1366, 600)
+                    self.human_click(1366, 750)
 
         # Try to click best chances
         if self.on_screen("Event_Predicted"):
@@ -578,6 +597,7 @@ class MirrorDungeonRunner:
             if self.on_screen(element_name):
                 if not self.human_click(element_name):
                     self.human_click(1707, 950)
+                time.sleep(1)
                 break
 
         if self.human_click('Event_Skip'):
@@ -604,6 +624,7 @@ class MirrorDungeonRunner:
         time.sleep(random.uniform(0.5, 2.0))
         self.human_click(1171,743)
     
+    #Worst Code Of All Time + Might Not Always Work
     def node_pathfind(self) -> bool:
         nodeScores = [0,0,0]
         tempScore = 0
@@ -653,7 +674,6 @@ class MirrorDungeonRunner:
             if maxScore < nodeScores[2]:
                 maxScore = nodeScores[2]
                 maxScoreNode = 4
-        print(maxScoreNode)
 
         match maxScoreNode:
             case 3:
@@ -709,11 +729,12 @@ class MirrorDungeonRunner:
                     self.human_click('EGOGift_Confirm')
 
             case 11: # Pack Selection
-                if self.on_screen('Pack_Hard'):
-                    self.human_click(1363, 100)
+                if not self.hardMode:
+                    if self.on_screen('Pack_Hard'):
+                        self.human_click(1363, 100)
                 self.move_to_element('Pack_Hanger')
                 pyautogui.dragRel(0, 500, 1)
-                reselectNodePathColros = True
+                reselectNodePathColors = True
 
             case 12: # Node Selection
                 if (self.reselectNodePathColors):
@@ -791,10 +812,26 @@ class MirrorDungeonRunner:
                 self.human_click(1200, 800)
 
             case 18: # Ego Gift Reward 2 (Acquire)
-                if not self.human_click('AcquireEGOGIFT'):
-                    self.human_click('Plus1')
-                time.sleep(random.uniform(0.2, 1.5))
-                self.human_click(1705, 870)
+                if self.hardMode:
+                    if self.on_screen('AcquireEGOSelect'):
+                        if not self.human_click('AcquireUnownedEGOGIFT'):
+                            if not self.human_click('Plus1'):
+                                self.human_click('AcquireEGOGIFT')
+                        time.sleep(random.uniform(0.2, 1.5))
+                        self.human_click(1705, 870)
+                    else:
+                        while not self.on_screen('TwoOfTwo'):
+                            if not self.human_click('AcquireUnownedEGOGIFT'):
+                                if not self.human_click('Plus1'):
+                                    self.human_click('AcquireEGOGIFT')
+                        time.sleep(random.uniform(0.2, 1.5))
+                        self.human_click(1705, 870)
+                else:
+                    if not self.human_click('AcquireUnownedEGOGIFT'):
+                        if not self.human_click('Plus1'):
+                            self.human_click('AcquireEGOGIFT')
+                    time.sleep(random.uniform(0.2, 1.5))
+                    self.human_click(1705, 870)
 
             case 19: # Collect Rewards Confirm (pass level up)
                 self.human_click(963, 700)
@@ -810,6 +847,15 @@ class MirrorDungeonRunner:
                 self.human_click(1150, 750)
 
             case 23: # End exploration reward
+                if self.hardMode:
+                    if self.weeklyBonusIndividual:
+                        self.human_click('WeeklyBonusButtonOff1')
+                        time.sleep(random.uniform(0.2,0.6))
+                        self.human_click("WeeklyBonusButtonOn2")
+                            
+                else:
+                    self.human_click('WeeklyBonusButtonOn1')
+                
                 self.human_click(1330, 810)
 
             case 24: # End exploration complete
@@ -828,13 +874,24 @@ class MirrorDungeonRunner:
                     elif self.on_screen('End_ExplorationComplete'):
                         self.human_click(1700, 900)
                     time.sleep(random.uniform(0.1, 0.5))
-            case 26:
+            case 26: #Multiple Event Effect Choice (defaults to relief as there are only 2 effects possible currently)
                 self.human_click("Relief");
                 time.sleep(random.uniform(0.1,0.5))
                 self.human_click("ConfirmEventEffect")
-            case 27:
+            case 27: #Sinners are low level warning
                 self.human_click("LowLevelConfirm")
                 time.sleep(1)
+            case 28: #Weekly Bonus Not Selected
+                if self.hardMode:
+                    self.human_click(781,740)
+                else:
+                    self.human_click(1150,740)
+            case 29:
+                if self.hardMode:
+                    self.human_click(1150,740)
+                else:
+                    self.human_click(781,740)
+
         return True
 
 
