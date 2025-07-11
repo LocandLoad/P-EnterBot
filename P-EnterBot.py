@@ -13,6 +13,8 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument('-r', '--runs', type=int)
 parser.add_argument('-t', '--team', type=int)
+parser.add_argument('-m', '--hardMode', type=bool)
+parser.add_argument('-ib', '--individualBonus', type=bool)
 
 pyautogui.FAILSAFE = False
 
@@ -39,7 +41,15 @@ def main():
     if args.team:
         team_id = args.team
 
-    mirror_dungeon_runner = MirrorDungeonRunner.MirrorDungeonRunner(team_id)
+    hard: bool | None = None
+    if args.hardMode:
+        hard = args.hardMode
+
+    individualWeeklyBonus: bool | None = None
+    if args.individualBonus:
+        individualWeeklyBonus = args.individualBonus
+
+    mirror_dungeon_runner = MirrorDungeonRunner.MirrorDungeonRunner(team_id,hard,individualWeeklyBonus)
     for i in range(runs):
         print(f"Doing run {i}")
         mirror_dungeon_runner.run_md()

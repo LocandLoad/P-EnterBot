@@ -214,12 +214,20 @@ class MirrorDungeonRunner:
     nodePathColorNear: tuple
     nodePathColorFar: tuple
 
-    hardMode: bool = True
-    weeklyBonusIndividual: bool = True
+    hardMode: bool
+    weeklyBonusIndividual: bool
 
-    def __init__(self, team_id: int | None = None) -> Self:
+    def __init__(self, team_id: int | None = None, hard: bool | None = None, individualBonus: bool | None = None) -> Self:
         self._get_screen_size()
         self._loadTeamConfigs()
+
+        if (individualBonus is None):
+            individualBonus = False
+        self.weeklyBonusIndividual = individualBonus
+
+        if (hard is None):
+            hardMode = False
+        self.hardMode = hard
 
         if team_id:
             self.curTeam = self.teams[team_id]
@@ -674,6 +682,13 @@ class MirrorDungeonRunner:
             if maxScore < nodeScores[2]:
                 maxScore = nodeScores[2]
                 maxScoreNode = 4
+        print("Node Scores Top To Bottom")
+        if nodeScores[1] != 0:
+            print(nodeScores[1])
+        if nodeScores[0] != 0:
+            print(nodeScores[0])
+        if nodeScores[2] != 0:
+            print(nodeScores[2])
 
         match maxScoreNode:
             case 3:
@@ -691,17 +706,17 @@ class MirrorDungeonRunner:
 
     
     def get_node_rating(self, region: tuple) -> int:
-        if self.on_screen(GameElement(-2, "Node_Event.png", region, grayscale = True)):
+        if self.on_screen(GameElement(-2, "Node_Event.png", region, grayscale = True, confidence = 0.8)):
             return 4
-        if self.on_screen(GameElement(-2, "Node_EventFar.png", region, grayscale = True)):
+        if self.on_screen(GameElement(-2, "Node_EventFar.png", region, grayscale = True, confidence = 0.8)):
             return 4
-        if self.on_screen(GameElement(-2, "Node_Midboss.png", region, grayscale = True)):
+        if self.on_screen(GameElement(-2, "Node_Midboss.png", region, grayscale = True, confidence = 0.8)):
             return 3
-        if self.on_screen(GameElement(-2, "Node_MidbossFar.png", region, grayscale = True)):
+        if self.on_screen(GameElement(-2, "Node_MidbossFar.png", region, grayscale = True, confidence = 0.8)):
             return 3
-        if self.on_screen(GameElement(-2, "Node_Combat.png", region, grayscale = True)):
+        if self.on_screen(GameElement(-2, "Node_Combat.png", region, grayscale = True, confidence = 0.8)):
             return 2
-        if self.on_screen(GameElement(-2, "Node_CombatFar.png", region, grayscale = True)):
+        if self.on_screen(GameElement(-2, "Node_CombatFar.png", region, grayscale = True, confidence = 0.8)):
             return 2
         return 1
 
