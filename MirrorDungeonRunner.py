@@ -268,10 +268,10 @@ class MirrorDungeonRunner:
         )
 
     def scale_x(self, x: int) -> int:
-        return (x / 1920) * self.width
+        return int((x / 1920) * self.width)
 
     def scale_y(self, y: int) -> int:
-        return (y / 1080) * self.height
+        return int((y / 1080) * self.height)
 
     def on_screen(self, game_element: GameElement | str) -> bool:
         if type(game_element) == str:
@@ -457,14 +457,14 @@ class MirrorDungeonRunner:
         for i in range(30):
             pyautogui.scroll(clicks=100)
 
-        curRow = 1
-        maxBonus = 0
-        maxTeamRow = 1
+            curRow = 1
+            maxBonus = 0
+            maxTeamRow = 1
 
-        for team in self.teams:
+      
             for team in self.teams:
                     if not team or len(team) == 0:
-                        logging.warning("Das ist empty row")
+                        logging.warning("That is empty row")
                         continue
                     try:
                         curRow = self.scrollTo(int(team[0]), curRow)
