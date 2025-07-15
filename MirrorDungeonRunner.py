@@ -31,18 +31,19 @@ class GameElement:
 
 REST_BONUS_REGION = (1750,780,60,60)
 
+#Pathfinding coords and regions
 NODE1PATHPIXELS = ((825,430),(829,326),(815,526))
 NODE2PATHPIXELS = ((1220,111),(1220,226))
 NODE3PATHPIXELS = ((1247,433),(1214,323),(1201,529))
 NODE4PATHPIXELS = ((1229,754),(1267,635))
 NODEPATHSEARCHNEAR = (825,430)
 NODEPATHSEARCHFAR = (1247,433)
-NODE2REGION = (990,70,250,250)
-NODE3REGION = (992,368,250,250)
-NODE4REGION = (990,716,250,250)
-NODE5REGION = (1385,70,250,250)
-NODE6REGION = (1385,368,250,250)
-NODE7REGION = (1385,716,250,250)
+NODE2REGION = (990,70,225,225)
+NODE3REGION = (990,368,225,225)
+NODE4REGION = (990,716,225,225)
+NODE5REGION = (1380,70,225,225)
+NODE6REGION = (1380,368,225,225)
+NODE7REGION = (1380,716,225,225)
 
 GAME_ELEMENTS = {
     "ClearAllCaches" : GameElement(0, "ClearAllCaches.png", (285, 950, 250, 100)),
@@ -50,7 +51,6 @@ GAME_ELEMENTS = {
     "MD6Button" : GameElement(2, "MD6Button.png", (520,351,300,250)),
     "MD6StartButton" : GameElement(3, "MD6StartButton.png", (715,255,550,650), 0.6),
     "EnterMD" : GameElement(4, "EnterMD.png", (960,690,400,100)),
-    "LowLevelCheck" : GameElement(27, "LowLevelCheck.png", (641,351,650,150)),
     "StarlightBonus" : GameElement(5, "StarlightBonus.png", (1600,770,300,250), 0.75),
     "DungeonProgress" : GameElement(6, "DungeonProgress.png", (812,325,300,100), 0.75),
     "Starlight_Guidance" : GameElement(7, "Starlight_Guidance.png", (828,579,350,200), 0.75),
@@ -58,7 +58,6 @@ GAME_ELEMENTS = {
     "Starting_Gift" : GameElement(9, "Starting_Gift.png", (1100,150,600,300)),
     "EGO_GIFT_GET" : GameElement(10, "EGO_GIFT_GET.png", (817,249,350,100)),
     "Theme_Pack" : GameElement(11, "Theme_Pack.png", (967,150,250,100)),
-    "SelectEventEffect" : GameElement(26, "SelectEventEffect.png", (564,200,900,300)), #rare occurence of multiple event status effects
     "NodeSelect" : GameElement(12, "NodeSelect.png", (1802,115,100,100), 0.9),
     "Event_Skip" : GameElement(13, "Event_Skip.png"),
     "Team_Total_Participants" : GameElement(14, "Team_TotalParticipants.png", (1595,750,150,100)),
@@ -73,6 +72,10 @@ GAME_ELEMENTS = {
     "End_ExplorationReward" : GameElement(23, "End_ExplorationReward.png", (725,126,400,100)),
     "End_ExplorationComplete" : GameElement(24, "End_ExplorationComplete.png", (179,112,300,200)),
     "End_Defeat" : GameElement(25, "End_Defeat.png", (1475,192,300,150)),
+    "SelectEventEffect" : GameElement(26, "SelectEventEffect.png", (564,200,900,300)), #rare occurence of multiple event status effects
+    "LowLevelCheck" : GameElement(27, "LowLevelCheck.png", (641,351,650,150)),
+    "WeeklyBonusEligible" : GameElement(28, "WeeklyBonusEligible.png", (591,373,900,400)),
+    "WeeklyBonusSpend" : GameElement(29, "WeeklyBonusSpend.png", (625,421,900,300)),
     "Team_TwelveOfTwelve" : GameElement(-2, "Team_TwelveOfTwelve.png", (1595,750,300,200)),
     "RestBonus_0" : GameElement(-2, "RestBonus_0.png", REST_BONUS_REGION, 0.95, False),
     "RestBonus_1" : GameElement(-2, "RestBonus_1.png", REST_BONUS_REGION, 0.9, False),
@@ -84,17 +87,19 @@ GAME_ELEMENTS = {
     "RestBonus_7" : GameElement(-2, "RestBonus_7.png", REST_BONUS_REGION, 0.925),
     "RestBonus_8" : GameElement(-2, "RestBonus_8.png", REST_BONUS_REGION, 0.95, False),
     "RestBonus_9" : GameElement(-2, "RestBonus_9.png", REST_BONUS_REGION, 0.9, False),
-    "ResumeMD5" : GameElement(-2, "ResumeMD5.png", (781,566,400,100)),
+    "ResumeMD" : GameElement(-2, "ResumeMD.png", (781,566,400,100)),
     "Teams" : GameElement(-2, "Teams.png", (143,411,200,100)),
     "ConfirmTeam" : GameElement(-2, "ConfirmTeam.png"),
     "ConfirmBuff" : GameElement(-2, "ConfirmBuff.png"),
     "EGOGift_Confirm" : GameElement(-2, "EGOGift_Confirm.png", grayscale=False),
     "Pack_Hard" : GameElement(-2, "Pack_Hard.png", grayscale=False),
-    "Pack_Hanger" : GameElement(-2, "Pack_Hanger.png", grayscale=False),
+    "Pack_Normal" : GameElement(-2, "Pack_Normal.png", grayscale =False),
+    "Pack_Hanger" : GameElement(-2, "Pack_Hanger.png", confidence=0.95, grayscale=False),
     "Clock_Face" : GameElement(-2, "Clock_Face.png", confidence=0.7, grayscale=False),
     "Enter_Node" : GameElement(-2, "Enter_Node.png", confidence=0.9, grayscale=False),
     "Event_Choices" : GameElement(-2, "Event_Choices.png", grayscale=False),
     "Event_EGOGIFT" : GameElement(-2, "Event_EGOGIFT.png", confidence=0.7, grayscale=False),
+    "Event_LevelUp" : GameElement(-2, "Event_LevelUp.png", confidence = 0.7, grayscale=False),
     "Event_Predicted" : GameElement(-2, "Event_Predicted.png", grayscale=False),
     "Event_VeryHigh" : GameElement(-2, "Event_VeryHigh.png", confidence=0.7, grayscale=False),
     "Event_High" : GameElement(-2, "Event_High.png", confidence=0.7, grayscale=False),
@@ -123,7 +128,38 @@ GAME_ELEMENTS = {
     "Rest5" : GameElement(-2, "Rest5.png", confidence=0.955, grayscale=False),
     "Relief" : GameElement(-2, "Relief.png", confidence = 0.9, grayscale = False),
     "ConfirmEventEffect" : GameElement(-2, "ConfirmEventEffect.png", confidence = 0.9, grayscale = False),
-    "LowLevelConfirm" : GameElement(-2, "LowLevelConfirm.png", (974,700,400,150), confidence = 0.8, grayscale = False)
+    "LowLevelConfirm" : GameElement(-2, "LowLevelConfirm.png", (974,700,400,150), confidence = 0.8, grayscale = False),
+    "TwoOfTwo" : GameElement(-2, "TwoOfTwo.png", confidence = 0.9, grayscale = False),
+    "AcquireUnownedEGOGIFT" : GameElement(-2, "AcquireUnownedEGOGIFT.png", confidence=0.85, grayscale=False),
+    "AcquireEGOSelect" : GameElement(-2, "AcquireEGOSelect.png", confidence=0.9, grayscale=False),
+    "WeeklyBonusButtonOn1" : GameElement(-2, "WeeklyBonusOn.png", (893,363,150,50), confidence =0.9, grayscale=False),
+    "WeeklyBonusButtonOn2" : GameElement(-2, "WeeklyBonusOn.png", (1055,363,150,50), confidence =0.9, grayscale=False),
+    "WeeklyBonusButtonOn3" : GameElement(-2, "WeeklyBonusOn.png", (1218,363,150,50), confidence =0.9, grayscale=False),
+    "WeeklyBonusButtonOff1" : GameElement(-2, "WeeklyBonusOff.png", (893,363,150,50), confidence =0.9, grayscale=False),
+    "WeeklyBonusButtonOff2" : GameElement(-2, "WeeklyBonusOff.png", (1055,363,150,50), confidence =0.9, grayscale=False),
+    "WeeklyBonusButtonOff3" : GameElement(-2, "WeeklyBonusOff.png", (1218,363,150,50), confidence =0.9, grayscale=False),
+    "Pack_Charge" : GameElement(-2, "Pack_Charge.png", confidence = 0.9, grayscale=False),
+    "Pack_Sinking" : GameElement(-2, "Pack_Sinking.png", confidence = 0.9, grayscale=False),
+    "Pack_Rupture" : GameElement(-2, "Pack_Rupture.png", confidence = 0.9, grayscale=False),
+    "Pack_Tremor" : GameElement(-2, "Pack_Tremor.png", confidence = 0.9, grayscale=False),
+    "Pack_Burn" : GameElement(-2, "Pack_Burn.png", confidence = 0.9, grayscale=False),
+    "Pack_Bleed" : GameElement(-2, "Pack_Bleed.png", confidence = 0.9, grayscale=False),
+    "Pack_Poise" : GameElement(-2, "Pack_Poise.png", confidence = 0.9, grayscale=False),
+    "Pack_Slash" : GameElement(-2, "Pack_Slash.png", confidence = 0.9, grayscale=False),
+    "Pack_Blunt" : GameElement(-2, "Pack_Blunt.png", confidence = 0.9, grayscale=False),
+    "Pack_Pierce" : GameElement(-2, "Pack_Pierce.png", confidence = 0.9, grayscale=False),
+    "Pack_Owned" : GameElement(-2, "Pack_Owned.png", confidence = 0.95, grayscale=False),
+    "Acquire_Poise" : GameElement(-2, "Acquire_Poise.png", confidence = 0.7,  grayscale = False),
+    "Acquire_Sinking" : GameElement(-2, "Acquire_Sinking.png", confidence =0.8, grayscale = False),
+    "Acquire_Charge" : GameElement(-2, "Acquire_Charge.png", confidence =0.8, grayscale = False),
+    "Acquire_Bleed" : GameElement(-2, "Acquire_Bleed.png", confidence =0.8, grayscale = False),
+    "Acquire_Burn" : GameElement(-2, "Acquire_Burn.png", confidence =0.8, grayscale = False),
+    "Acquire_Rupture" : GameElement(-2, "Acquire_Rupture.png", confidence =0.8, grayscale = False),
+    "Acquire_Tremor" : GameElement(-2, "Acquire_Tremor.png", confidence =0.8, grayscale = False),
+    "Acquire_Pierce" : GameElement(-2, "Acquire_Pierce.png", confidence =0.8, grayscale = False),
+    "Acquire_Blunt" : GameElement(-2, "Acquire_Blunt.png", confidence =0.8, grayscale = False),
+    "Acquire_Slash" : GameElement(-2, "Acquire_Slash.png", confidence =0.8, grayscale = False),
+    "Plus2" : GameElement(-2, "Plus2.png", confidence =0.9, grayscale = False)
 }
 
 
@@ -150,6 +186,8 @@ BASE_STATES = [
     "RefuseGift",
     "End_Passlvlup",
     "End_Victory",
+    "WeeklyBonusEligible",
+    "WeeklyBonusSpend",
     "End_ClaimTheRewards",
     "End_ClaimTheRewards1",
     "End_ExplorationReward",
@@ -194,14 +232,25 @@ class MirrorDungeonRunner:
     curState: int = -1
 
     teamSelected: bool = False
-
+    
     reselectNodePathColors: bool = True
     nodePathColorNear: tuple
     nodePathColorFar: tuple
 
-    def __init__(self, team_id: int | None = None) -> Self:
+    hardMode: bool
+    weeklyBonusIndividual: bool
+
+    def __init__(self, team_id: int | None = None, hard: bool | None = None, individualBonus: bool | None = None) -> Self:
         self._get_screen_size()
         self._loadTeamConfigs()
+
+        if (individualBonus is None):
+            individualBonus = False
+        self.weeklyBonusIndividual = individualBonus
+
+        if (hard is None):
+            hardMode = False
+        self.hardMode = hard
 
         if team_id:
             self.curTeam = self.teams[team_id]
@@ -429,7 +478,7 @@ class MirrorDungeonRunner:
                 case 4:
                     self.human_click('EnterMD')
                 case 6:
-                    self.human_click('ResumeMD5')
+                    self.human_click('ResumeMD')
                 case -1:
                     pass
                 case _:
@@ -506,7 +555,7 @@ class MirrorDungeonRunner:
         while not self.human_click('ConfirmTeam'):
             pass
 
-        time.sleep(1)
+        time.sleep(1.5)
 
     def selectStartingGifts(self) -> None:
         giftType: str = self.curTeam[1].lower()
@@ -561,10 +610,11 @@ class MirrorDungeonRunner:
 
     def do_event(self) -> None:
         if self.on_screen('Event_Choices'):
-            if not self.human_click('Event_EGOGIFT'):
-                self.human_click(1366, 350)
-                self.human_click(1366, 600)
-                self.human_click(1366, 750)
+            if not self.human_click('Event_LevelUp'):
+                if not self.human_click('Event_EGOGIFT'):
+                    self.human_click(1366, 350)
+                    self.human_click(1366, 600)
+                    self.human_click(1366, 750)
 
         # Try to click best chances
         if self.on_screen("Event_Predicted"):
@@ -578,6 +628,7 @@ class MirrorDungeonRunner:
             if self.on_screen(element_name):
                 if not self.human_click(element_name):
                     self.human_click(1707, 950)
+                time.sleep(1)
                 break
 
         if self.human_click('Event_Skip'):
@@ -604,6 +655,7 @@ class MirrorDungeonRunner:
         time.sleep(random.uniform(0.5, 2.0))
         self.human_click(1171,743)
     
+    #Worst Code Of All Time + Might Not Always Work
     def node_pathfind(self) -> bool:
         nodeScores = [0,0,0]
         tempScore = 0
@@ -653,7 +705,6 @@ class MirrorDungeonRunner:
             if maxScore < nodeScores[2]:
                 maxScore = nodeScores[2]
                 maxScoreNode = 4
-        print(maxScoreNode)
 
         match maxScoreNode:
             case 3:
@@ -669,21 +720,204 @@ class MirrorDungeonRunner:
         
         return False
 
+
     
     def get_node_rating(self, region: tuple) -> int:
-        if self.on_screen(GameElement(-2, "Node_Event.png", region, grayscale = True)):
+        if self.on_screen(GameElement(-2, "Node_Event.png", region, grayscale = True, confidence = 0.8)):
+            return 5
+        if self.on_screen(GameElement(-2, "Node_EventFar.png", region, grayscale = True, confidence = 0.8)):
             return 4
-        if self.on_screen(GameElement(-2, "Node_EventFar.png", region, grayscale = True)):
+        if self.on_screen(GameElement(-2, "Node_Midboss.png", region, grayscale = True, confidence = 0.8)):
             return 4
-        if self.on_screen(GameElement(-2, "Node_Midboss.png", region, grayscale = True)):
+        if self.on_screen(GameElement(-2, "Node_MidbossFar.png", region, grayscale = True, confidence = 0.8)):
             return 3
-        if self.on_screen(GameElement(-2, "Node_MidbossFar.png", region, grayscale = True)):
+        if self.on_screen(GameElement(-2, "Node_Combat.png", region, grayscale = True, confidence = 0.8)):
             return 3
-        if self.on_screen(GameElement(-2, "Node_Combat.png", region, grayscale = True)):
-            return 2
-        if self.on_screen(GameElement(-2, "Node_CombatFar.png", region, grayscale = True)):
+        if self.on_screen(GameElement(-2, "Node_CombatFar.png", region, grayscale = True, confidence = 0.8)):
             return 2
         return 1
+
+
+
+    def pick_pack(self, hangers : list | None = None) -> None:
+        PIXELOFFSET : int = 150
+        TEMPREGIONTOP: int = 800
+        TEMPREGIONHEIGHT: int = 150
+        TEMPREGIONWIDTH : int = 325
+        tempRegion : tuple
+        key : int = 0
+        maxKey : int = 0
+        maxScore: int = 0
+        if hangers is None:
+            return
+        for hanger in hangers:
+            tempRegion = (hanger.left - PIXELOFFSET, TEMPREGIONTOP, TEMPREGIONWIDTH, TEMPREGIONHEIGHT)
+            if self.score_pack(tempRegion) > maxScore:
+                maxKey = key
+            key += 1
+        pyautogui.moveTo(pyautogui.center(hangers[maxKey]))
+
+
+
+    def score_elements(self, region: tuple, game_element: GameElement) -> int:
+        game_element.region = region
+        score: int = 0
+        elements : list = self.locate_all_on_screen(game_element)
+        if not elements is None:
+            for element in elements:
+                score += 1
+        return score
+
+
+
+    def score_pack(self, region: tuple) -> int:
+        score: int = 0
+        giftType: str = self.curTeam[1].lower()
+        match giftType:
+            case "charge":
+                game_element: GameElement = GAME_ELEMENTS["Pack_Charge"]
+                score += self.score_elements(region,game_element)
+            case "sinking":
+                game_element: GameElement = GAME_ELEMENTS["Pack_Sinking"]
+                score += self.score_elements(region,game_element)
+            case "poise":
+                game_element: GameElement = GAME_ELEMENTS["Pack_Poise"]
+                score += self.score_elements(region,game_element)
+            case "rupture":
+                game_element: GameElement = GAME_ELEMENTS["Pack_Rupture"]
+                score += self.score_elements(region,game_element)
+            case "tremor":
+                game_element: GameElement = GAME_ELEMENTS["Pack_Tremor"]
+                score += self.score_elements(region,game_element)
+            case "bleed":
+                game_element: GameElement = GAME_ELEMENTS["Pack_Bleed"]
+                score += self.score_elements(region,game_element)
+            case "burn":
+                game_element: GameElement = GAME_ELEMENTS["Pack_Burn"]
+                score += self.score_elements(region,game_element)
+            case "slash":
+                game_element: GameElement = GAME_ELEMENTS["Pack_Slash"]
+                score += self.score_elements(region,game_element)
+            case "blunt":
+                game_element: GameElement = GAME_ELEMENTS["Pack_Blunt"]
+                score += self.score_elements(region,game_element)
+            case "pierce":
+                game_element: GameElement = GAME_ELEMENTS["Pack_Pierce"]
+                score += self.score_elements(region,game_element)
+        game_element: GameElement = GAME_ELEMENTS["Pack_Owned"]
+        score -= self.score_elements(region,game_element)
+        return score
+    
+
+
+    def score_gift(self, region: tuple) -> int:
+        score: int = 0
+        giftType: str = self.curTeam[1].lower()
+        match giftType:
+            case "charge":
+                game_element: GameElement = GAME_ELEMENTS["Acquire_Charge"]
+                game_element.region = region
+                if self.on_screen(game_element):
+                    score += 2
+            case "sinking":
+                game_element: GameElement = GAME_ELEMENTS["Acquire_Sinking"]
+                game_element.region = region
+                if self.on_screen(game_element):
+                    score += 2
+            case "poise":
+                game_element: GameElement = GAME_ELEMENTS["Acquire_Poise"]
+                game_element.region = region
+                if self.on_screen(game_element):
+                    score += 2
+            case "rupture":
+                game_element: GameElement = GAME_ELEMENTS["Acquire_Rupture"]
+                game_element.region = region
+                if self.on_screen(game_element):
+                    score += 2
+            case "tremor":
+                game_element: GameElement = GAME_ELEMENTS["Acquire_Tremor"]
+                game_element.region = region
+                if self.on_screen(game_element):
+                    score += 2
+            case "bleed":
+                game_element: GameElement = GAME_ELEMENTS["Acquire_Bleed"]
+                game_element.region = region
+                if self.on_screen(game_element):
+                    score += 2
+            case "burn":
+                game_element: GameElement = GAME_ELEMENTS["Acquire_Burn"]
+                game_element.region = region
+                if self.on_screen(game_element):
+                    score += 2
+            case "slash":
+                game_element: GameElement = GAME_ELEMENTS["Acquire_Slash"]
+                game_element.region = region
+                if self.on_screen(game_element):
+                    score += 2
+            case "blunt":
+                game_element: GameElement = GAME_ELEMENTS["Acquire_Blunt"]
+                game_element.region = region
+                if self.on_screen(game_element):
+                    score += 2
+            case "pierce":
+                game_element: GameElement = GAME_ELEMENTS["Acquire_Pierce"]
+                game_element.region = region
+                if self.on_screen(game_element):
+                    score += 2
+        game_element: GameElement = GAME_ELEMENTS["Plus2"]
+        game_element.region = region
+        if self.on_screen(game_element):
+            score -= 1
+        return score
+    
+
+
+    def choose_best_gift(self) -> None:
+        ACQUIREGIFTTOP : int = 300
+        ACQUIREGIFTHEIGHT: int = 550
+        score: int = 0
+        maxScore: int = -1
+        key: int = 0
+        maxKey: int = 0
+        unowned_gifts: list | None = self.locate_all_on_screen('AcquireUnownedEGOGIFT')
+        if unowned_gifts is None:
+            owned_gifts: list | None = self.locate_all_on_screen('AcquireEGOGIFT')
+            if not owned_gifts is None:
+                for gift in owned_gifts:
+                    temp_region: tuple = (gift.left,ACQUIREGIFTTOP,gift.width,ACQUIREGIFTHEIGHT)
+                    score = self.score_gift(temp_region)
+                    if maxScore < score:
+                        maxScore = score
+                        maxKey = key
+                    key += 1
+                self.human_click(pyautogui.center(owned_gifts[maxKey]))
+        else:
+            for gift in unowned_gifts:
+                temp_region: tuple = (gift.left,ACQUIREGIFTTOP,gift.width,ACQUIREGIFTHEIGHT)
+                score = self.score_gift(temp_region)
+                if maxScore < score:
+                    maxScore = score
+                    maxKey = key
+                key += 1
+            self.human_click(pyautogui.center(unowned_gifts[maxKey]))
+
+
+
+    def acquire_gifts(self) -> None:
+        if self.hardMode:
+            if self.on_screen('AcquireEGOSelect'): #occasional case where you only have to pick 1 in hardmode
+                self.choose_best_gift()
+                time.sleep(random.uniform(0.2, 1.5))
+                self.human_click(1705, 870)
+            else:
+                while not self.on_screen('TwoOfTwo'):
+                    self.choose_best_gift()
+                time.sleep(random.uniform(0.2, 1.5))
+                self.human_click(1705, 870)
+        else:
+            self.choose_best_gift()
+            time.sleep(random.uniform(0.2, 1.5))
+            self.human_click(1705, 870)
 
     # Main MD Logic Loop
     def process_state(self) -> bool:
@@ -709,9 +943,17 @@ class MirrorDungeonRunner:
                     self.human_click('EGOGift_Confirm')
 
             case 11: # Pack Selection
-                if self.on_screen('Pack_Hard'):
-                    self.human_click(1363, 100)
-                self.move_to_element('Pack_Hanger')
+                time.sleep(0.75)
+                if not self.hardMode:
+                    if self.on_screen('Pack_Hard'):
+                        self.human_click(1363, 100)
+                else:
+                    if self.on_screen('Pack_Normal'):
+                        self.human_click(1363, 77)
+
+                self.pick_pack(self.locate_all_on_screen('Pack_Hanger'))
+
+                #self.move_to_element('Pack_Hanger')
                 pyautogui.dragRel(0, 500, 1)
                 reselectNodePathColors = True
 
@@ -780,6 +1022,7 @@ class MirrorDungeonRunner:
                 pyautogui.press('enter')
 
             case 16: # Shop
+
                 self.do_shop()
                 self.human_click('Shop_Leave')
 
@@ -791,10 +1034,7 @@ class MirrorDungeonRunner:
                 self.human_click(1200, 800)
 
             case 18: # Ego Gift Reward 2 (Acquire)
-                if not self.human_click('AcquireEGOGIFT'):
-                    self.human_click('Plus1')
-                time.sleep(random.uniform(0.2, 1.5))
-                self.human_click(1705, 870)
+                self.acquire_gifts()
 
             case 19: # Collect Rewards Confirm (pass level up)
                 self.human_click(963, 700)
@@ -810,6 +1050,15 @@ class MirrorDungeonRunner:
                 self.human_click(1150, 750)
 
             case 23: # End exploration reward
+                if self.hardMode:
+                    if self.weeklyBonusIndividual:
+                        self.human_click('WeeklyBonusButtonOff1')
+                        time.sleep(random.uniform(0.2,0.6))
+                        self.human_click("WeeklyBonusButtonOn2")
+                            
+                else:
+                    self.human_click('WeeklyBonusButtonOn1')
+                
                 self.human_click(1330, 810)
 
             case 24: # End exploration complete
@@ -828,13 +1077,24 @@ class MirrorDungeonRunner:
                     elif self.on_screen('End_ExplorationComplete'):
                         self.human_click(1700, 900)
                     time.sleep(random.uniform(0.1, 0.5))
-            case 26:
+            case 26: #Multiple Event Effect Choice (defaults to relief as there are only 2 effects possible currently)
                 self.human_click("Relief");
                 time.sleep(random.uniform(0.1,0.5))
                 self.human_click("ConfirmEventEffect")
-            case 27:
+            case 27: #Sinners are low level warning
                 self.human_click("LowLevelConfirm")
                 time.sleep(1)
+            case 28: #Weekly Bonus Not Selected
+                if self.hardMode:
+                    self.human_click(781,740)
+                else:
+                    self.human_click(1150,740)
+            case 29:
+                if self.hardMode:
+                    self.human_click(1150,740)
+                else:
+                    self.human_click(781,740)
+
         return True
 
 

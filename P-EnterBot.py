@@ -13,6 +13,8 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument('-r', '--runs', type=int)
 parser.add_argument('-t', '--team', type=int)
+parser.add_argument('-m', '--hardMode', type=bool)
+parser.add_argument('-b', '--oneBonusPerRun', type=bool)
 
 pyautogui.FAILSAFE = False
 
@@ -26,6 +28,8 @@ def main():
     runs = 0
     if not args.runs:
         user_input: str = pyautogui.prompt(text = "Enter number of MD runs", title = "StartMenu", default = 1)
+        if not user_input:
+            return 0
         if not user_input.isnumeric():
             print("Number of runs must be integer")
             exit(1)
@@ -37,7 +41,15 @@ def main():
     if args.team:
         team_id = args.team
 
-    mirror_dungeon_runner = MirrorDungeonRunner.MirrorDungeonRunner(team_id)
+    hard: bool | None = None
+    if args.hardMode:
+        hard = args.hardMode
+
+    individualWeeklyBonus: bool | None = None
+    if args.individualBonus:
+        individualWeeklyBonus = args.individualBonus
+
+    mirror_dungeon_runner = MirrorDungeonRunner.MirrorDungeonRunner(team_id,hard,individualWeeklyBonus)
     for i in range(runs):
         print(f"Doing run {i}")
         mirror_dungeon_runner.run_md()

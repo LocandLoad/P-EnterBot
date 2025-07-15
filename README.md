@@ -14,7 +14,7 @@ A program designed to run mirror dungeons in the hit Korean gacha game Limbus Co
 
 Only really tested on 1920 x 1080p. There's some code to try and scale images and positions, but it might not work too well.
 
-# Insallation
+# Installation
 
 ## Windows
 
