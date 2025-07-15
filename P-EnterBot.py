@@ -14,7 +14,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument('-r', '--runs', type=int)
 parser.add_argument('-t', '--team', type=int)
 parser.add_argument('-m', '--hardMode', type=bool)
-parser.add_argument('-ib', '--individualBonus', type=bool)
+parser.add_argument('-b', '--oneBonusPerRun', type=bool)
 
 pyautogui.FAILSAFE = False
 
