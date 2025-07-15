@@ -705,13 +705,6 @@ class MirrorDungeonRunner:
             if maxScore < nodeScores[2]:
                 maxScore = nodeScores[2]
                 maxScoreNode = 4
-        print("Node Scores Top To Bottom")
-        if nodeScores[1] != 0:
-            print(nodeScores[1])
-        if nodeScores[0] != 0:
-            print(nodeScores[0])
-        if nodeScores[2] != 0:
-            print(nodeScores[2])
 
         match maxScoreNode:
             case 3:
@@ -755,14 +748,10 @@ class MirrorDungeonRunner:
         key : int = 0
         maxKey : int = 0
         maxScore: int = 0
-        print(self.curTeam[1].lower())
         if hangers is None:
             return
         for hanger in hangers:
             tempRegion = (hanger.left - PIXELOFFSET, TEMPREGIONTOP, TEMPREGIONWIDTH, TEMPREGIONHEIGHT)
-            print("Hanger Number: " + str(key))
-            print("Region: ")
-            print(tempRegion)
             if self.score_pack(tempRegion) > maxScore:
                 maxKey = key
             key += 1
@@ -817,7 +806,6 @@ class MirrorDungeonRunner:
                 score += self.score_elements(region,game_element)
         game_element: GameElement = GAME_ELEMENTS["Pack_Owned"]
         score -= self.score_elements(region,game_element)
-        print("score: " + str(score))
         return score
     
 
@@ -880,7 +868,6 @@ class MirrorDungeonRunner:
         game_element.region = region
         if self.on_screen(game_element):
             score -= 1
-        print("score: " + str(score))
         return score
     
 
@@ -897,9 +884,7 @@ class MirrorDungeonRunner:
             owned_gifts: list | None = self.locate_all_on_screen('AcquireEGOGIFT')
             if not owned_gifts is None:
                 for gift in owned_gifts:
-                    print("Gift #: " + str(key))
                     temp_region: tuple = (gift.left,ACQUIREGIFTTOP,gift.width,ACQUIREGIFTHEIGHT)
-                    print("Region: " + str(temp_region))
                     score = self.score_gift(temp_region)
                     if maxScore < score:
                         maxScore = score
@@ -908,9 +893,7 @@ class MirrorDungeonRunner:
                 self.human_click(pyautogui.center(owned_gifts[maxKey]))
         else:
             for gift in unowned_gifts:
-                print("Gift #: " + str(key))
                 temp_region: tuple = (gift.left,ACQUIREGIFTTOP,gift.width,ACQUIREGIFTHEIGHT)
-                print("Region: " + str(temp_region))
                 score = self.score_gift(temp_region)
                 if maxScore < score:
                     maxScore = score
