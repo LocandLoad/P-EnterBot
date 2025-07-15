@@ -249,8 +249,9 @@ class MirrorDungeonRunner:
         self.weeklyBonusIndividual = individualBonus
 
         if (hard is None):
-            hardMode = False
-        self.hardMode = hard
+            self.hardMode = False
+        else:
+            self.hardMode = hard
 
         if team_id:
             self.curTeam = self.teams[team_id]

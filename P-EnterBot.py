@@ -41,13 +41,13 @@ def main():
     if args.team:
         team_id = args.team
 
-    hard: bool | None = None
+    hard: bool | None = False
     if args.hardMode:
         hard = args.hardMode
 
     individualWeeklyBonus: bool | None = None
-    if args.individualBonus:
-        individualWeeklyBonus = args.individualBonus
+    if args.oneBonusPerRun:
+        individualWeeklyBonus = args.oneBonusPerRun
 
     mirror_dungeon_runner = MirrorDungeonRunner.MirrorDungeonRunner(team_id,hard,individualWeeklyBonus)
     for i in range(runs):

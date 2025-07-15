@@ -32,7 +32,7 @@ If a run count is not provided through the programs arguments, it will ask for a
 
 the `--team` argument is only intended to be used if you have to restart / start the program in the middle of a Mirror Dungeon run. Otherwise, the program will pick the team with the best rest bonus and use that.
 
-the `--hardMode` argument will run hard mode dungeons when True and normal dungeons when False. If weekly bonus is available it will claim all bonuses.
+the `--hardMode` argument will run hard mode dungeons when True and normal dungeons when False. If weekly bonus is available and hard mode is on it will claim all bonuses. Otherwise it will claim no bonuses in normal mode.
 
 the `--oneBonusPerRun` argument will make the bot claim only one weekly bonus per run for optimal enkephalin per BP level.
 
