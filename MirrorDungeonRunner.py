@@ -317,9 +317,14 @@ class MirrorDungeonRunner:
             self.teams = []
 
             # TODO : test self.teams = csv_reader[1:] (idk if csv_reader is an iteratable, i think i can tho)
+            #issue is we come accross empty rows from the csv files
+            #jsut doing i > 0 wasnt enaugh to avoid void rows
             for i, row in enumerate(csv_reader):
-                if i > 0:
+                if i > 0 and row and row[0].strip().isdigit():
                     self.teams.append(row)
+                else:
+                    logging.warning(f"invalid /empty team row - it will be skipped: {row}")
+
 
         self.curTeam = self.teams[0]
 
@@ -338,10 +343,10 @@ class MirrorDungeonRunner:
         )
 
     def scale_x(self, x: int) -> int:
-        return (x / 1920) * self.width
+        return int((x / 1920) * self.width)
 
     def scale_y(self, y: int) -> int:
-        return (y / 1080) * self.height
+        return int((y / 1080) * self.height)
 
     def on_screen(self, game_element: GameElement | str) -> bool:
         if type(game_element) == str:
@@ -529,11 +534,22 @@ class MirrorDungeonRunner:
         for i in range(30):
             pyautogui.scroll(clicks=100)
 
-        curRow = 1
-        maxBonus = 0
-        maxTeamRow = 1
+            curRow = 1
+            maxBonus = 0
+            maxTeamRow = 1
 
-        for team in self.teams:
+      
+            for team in self.teams:
+                    if not team or len(team) == 0:
+                        logging.warning("That is empty row")
+                        continue
+                    try:
+                        curRow = self.scrollTo(int(team[0]), curRow)
+                    except (IndexError, ValueError) as e:
+                        logging.error(f"no team entry: {team} — {e}")
+                        continue
+
+
             curRow = self.scrollTo(int(team[0]), curRow)
             time.sleep(random.uniform(0.3, 2.0))
             self.human_click()
