@@ -130,7 +130,7 @@ GAME_ELEMENTS = {
     "ConfirmEventEffect" : GameElement(-2, "ConfirmEventEffect.png", confidence = 0.9, grayscale = False),
     "LowLevelConfirm" : GameElement(-2, "LowLevelConfirm.png", (974,700,400,150), confidence = 0.8, grayscale = False),
     "TwoOfTwo" : GameElement(-2, "TwoOfTwo.png", confidence = 0.9, grayscale = False),
-    "AcquireUnownedEGOGIFT" : GameElement(-2, "AcquireUnownedEGOGIFT.png", confidence=0.9, grayscale=False),
+    "AcquireUnownedEGOGIFT" : GameElement(-2, "AcquireUnownedEGOGIFT.png", confidence=0.85, grayscale=False),
     "AcquireEGOSelect" : GameElement(-2, "AcquireEGOSelect.png", confidence=0.9, grayscale=False),
     "WeeklyBonusButtonOn1" : GameElement(-2, "WeeklyBonusOn.png", (893,363,150,50), confidence =0.9, grayscale=False),
     "WeeklyBonusButtonOn2" : GameElement(-2, "WeeklyBonusOn.png", (1055,363,150,50), confidence =0.9, grayscale=False),
@@ -893,7 +893,20 @@ class MirrorDungeonRunner:
         key: int = 0
         maxKey: int = 0
         unowned_gifts: list | None = self.locate_all_on_screen('AcquireUnownedEGOGIFT')
-        if not unowned_gifts is None:
+        if unowned_gifts is None:
+            owned_gifts: list | None = self.locate_all_on_screen('AcquireEGOGIFT')
+            if not owned_gifts is None:
+                for gift in owned_gifts:
+                    print("Gift #: " + str(key))
+                    temp_region: tuple = (gift.left,ACQUIREGIFTTOP,gift.width,ACQUIREGIFTHEIGHT)
+                    print("Region: " + str(temp_region))
+                    score = self.score_gift(temp_region)
+                    if maxScore < score:
+                        maxScore = score
+                        maxKey = key
+                    key += 1
+                self.human_click(pyautogui.center(owned_gifts[maxKey]))
+        else:
             for gift in unowned_gifts:
                 print("Gift #: " + str(key))
                 temp_region: tuple = (gift.left,ACQUIREGIFTTOP,gift.width,ACQUIREGIFTHEIGHT)
