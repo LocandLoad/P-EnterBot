@@ -76,6 +76,8 @@ GAME_ELEMENTS = {
     "LowLevelCheck" : GameElement(27, "LowLevelCheck.png", (641,351,650,150)),
     "WeeklyBonusEligible" : GameElement(28, "WeeklyBonusEligible.png", (591,373,900,400)),
     "WeeklyBonusSpend" : GameElement(29, "WeeklyBonusSpend.png", (625,421,900,300)),
+    "FORGO_EGO_GIFT_SEARCH" : GameElement(30, "FORGO_EGO_GIFT_SEARCH.png", (740,480,400,100)),
+    "EGO_GIFT_SEARCH" : GameElement(31, "EGO_GIFT_SEARCH.png", (205,32,350,100)),
     "Team_TwelveOfTwelve" : GameElement(-2, "Team_TwelveOfTwelve.png", (1595,750,300,200)),
     "RestBonus_0" : GameElement(-2, "RestBonus_0.png", REST_BONUS_REGION, 0.95, False),
     "RestBonus_1" : GameElement(-2, "RestBonus_1.png", REST_BONUS_REGION, 0.9, False),
@@ -174,6 +176,8 @@ BASE_STATES = [
     "Starlight_Guidance",
     "Will_You_Buff",
     "Starting_Gift",
+    "FORGO_EGO_GIFT_SEARCH",
+    "EGO_GIFT_SEARCH",
     "EGO_GIFT_GET",
     "Theme_Pack",
     "SelectEventEffect",
@@ -1095,7 +1099,10 @@ class MirrorDungeonRunner:
                     self.human_click(1150,740)
                 else:
                     self.human_click(781,740)
-
+            case 30: #confirm ego gift search
+                self.human_click(1144,749)
+            case 31: #ego gift search
+                self.human_click(1366,886)
         return True
 
 

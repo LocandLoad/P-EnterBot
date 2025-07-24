@@ -7,3 +7,4 @@ __pycache__
 .screenshot*.png
 venv
 TeamConfig.csv
+debug.py
