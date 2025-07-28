@@ -465,7 +465,7 @@ class MirrorDungeonRunner:
 
     def get_to_mirror_dungeon(self) -> None:
         while True:
-            time.sleep(random.uniform(1.0, 5.0))
+            time.sleep(random.uniform(1.0, 3.0))
 
             state: int = self.find_state()
 
@@ -557,7 +557,7 @@ class MirrorDungeonRunner:
 
         for team_i, team in enumerate(self.teams):
             curRow = self.scrollTo(int(team[0]), curRow)
-            time.sleep(random.uniform(0.3, 2.0))
+            time.sleep(random.uniform(0.3, 1.5))
             self.human_click()
 
             time.sleep(random.uniform(0.1, 0.7))
@@ -678,7 +678,7 @@ class MirrorDungeonRunner:
         self.human_click('Shop_Leave')
         time.sleep(random.uniform(0.5, 2.0))
         self.human_click(1171,743)
-    
+
     #Worst Code Of All Time + Might Not Always Work
     def node_pathfind(self) -> bool:
         nodeScores = [0,0,0]
@@ -701,7 +701,7 @@ class MirrorDungeonRunner:
             if maxScore < nodeScores[0]:
                 maxScore = nodeScores[0]
                 maxScoreNode = 3
-        
+
         if pyautogui.pixelMatchesColor(NODE1PATHPIXELS[1][0],NODE1PATHPIXELS[1][1],self.nodePathColorNear, tolerance = 10):
             nodeScores[1] = self.get_node_rating(NODE2REGION)
             tempScore = nodeScores[1]
@@ -715,7 +715,7 @@ class MirrorDungeonRunner:
             if maxScore < nodeScores[1]:
                 maxScore = nodeScores[1]
                 maxScoreNode = 2
-        
+
         if pyautogui.pixelMatchesColor(NODE1PATHPIXELS[2][0],NODE1PATHPIXELS[2][1],self.nodePathColorNear, tolerance = 10):
             nodeScores[2] = self.get_node_rating(NODE4REGION)
             tempScore = nodeScores[2]
@@ -741,11 +741,11 @@ class MirrorDungeonRunner:
                 self.human_click(pyautogui.center(NODE4REGION))
                 return True
 
-        
+
         return False
 
 
-    
+
     def get_node_rating(self, region: tuple) -> int:
         if self.on_screen(GameElement(-2, "Node_Event.png", region, grayscale = True, confidence = 0.8)):
             return 5
@@ -831,7 +831,7 @@ class MirrorDungeonRunner:
         game_element: GameElement = GAME_ELEMENTS["Pack_Owned"]
         score -= self.score_elements(region,game_element)
         return score
-    
+
 
 
     def score_gift(self, region: tuple) -> int:
@@ -893,7 +893,7 @@ class MirrorDungeonRunner:
         if self.on_screen(game_element):
             score -= 1
         return score
-    
+
 
 
     def choose_best_gift(self) -> None:
@@ -1031,7 +1031,7 @@ class MirrorDungeonRunner:
                     for i in range(12):
                         self.human_click(SINNER_COORDINATES[self.curTeam[i+2].lower()])
                         time.sleep(random.uniform(0.3, 1.5))
-                    
+
                     self.teamSelected = True
 
                 time.sleep(random.uniform(0.25, 0.75))
@@ -1079,10 +1079,10 @@ class MirrorDungeonRunner:
                         self.human_click('WeeklyBonusButtonOff1')
                         time.sleep(random.uniform(0.2,0.6))
                         self.human_click("WeeklyBonusButtonOn2")
-                            
+
                 else:
                     self.human_click('WeeklyBonusButtonOn1')
-                
+
                 self.human_click(1330, 810)
 
             case 24: # End exploration complete
