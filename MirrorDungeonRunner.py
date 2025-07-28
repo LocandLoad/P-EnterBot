@@ -556,6 +556,11 @@ class MirrorDungeonRunner:
         maxTeamRow = 1
 
         for team_i, team in enumerate(self.teams):
+
+            # Skip blank rows
+            if not team:
+                continue
+
             curRow = self.scrollTo(int(team[0]), curRow)
             time.sleep(random.uniform(0.3, 1.5))
             self.human_click()
