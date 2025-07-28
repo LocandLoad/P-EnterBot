@@ -16,6 +16,7 @@ parser = argparse.ArgumentParser(
     prog="(L.C.M.D.D.S.) : Limbus Company Mirror Dungeon Do-er Script"
 )
 parser.add_argument('-q', '--queue', type=str)
+parser.add_argument('-l', '--loadLast', type=bool)
 parser.add_argument('-r', '--runs', type=int)
 parser.add_argument('-t', '--team', type=int)
 parser.add_argument('-m', '--hardMode', type=bool)
@@ -50,8 +51,10 @@ def parse_queue(q: str) -> list[Run]:
 
     return runs
 
-def do_queued_runs(queue: list[Run], team_id: int | None, individualWeeklyBonus: bool | None) -> None:
+def do_queued_runs(queue: list[Run], load_last: bool, team_id: int | None, individualWeeklyBonus: bool | None) -> None:
     mirror_dungeon_runner = MirrorDungeonRunner.MirrorDungeonRunner(team_id, individualWeeklyBonus)
+    if load_last:
+        mirror_dungeon_runner.loadLastSelectedTeam()
 
     run_count = 1
     for run in queue:
@@ -64,6 +67,12 @@ def do_queued_runs(queue: list[Run], team_id: int | None, individualWeeklyBonus:
             run_count += 1
 
 def main():
+    os.makedirs('.cache/', exist_ok=True)
+
+    load_last: bool = False
+    if args.loadLast:
+        load_last = args.loadLast
+
     team_id: int | None = None
     if args.team:
         team_id = args.team
@@ -74,7 +83,7 @@ def main():
 
     if args.queue:
         queue: list[Run] = parse_queue(args.queue)
-        do_queued_runs(queue, team_id, individualWeeklyBonus)
+        do_queued_runs(queue, load_last, team_id, individualWeeklyBonus)
         return
 
     runs = 0
@@ -95,6 +104,8 @@ def main():
 
     mirror_dungeon_runner = MirrorDungeonRunner.MirrorDungeonRunner(team_id, individualWeeklyBonus)
     mirror_dungeon_runner.hardMode = hard
+    if load_last:
+        mirror_dungeon_runner.loadLastSelectedTeam()
     for i in range(runs):
         print(f"Doing run {i}")
         mirror_dungeon_runner.run_md()

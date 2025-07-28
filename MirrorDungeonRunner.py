@@ -1,6 +1,8 @@
+import datetime
 import logging
 import random
 import time
+import json
 import math
 import csv
 import os
@@ -17,6 +19,7 @@ from PIL import Image
 logging.basicConfig(format='%(levelname)s:%(funcName)s - %(message)s', level=logging.DEBUG)
 
 IMAGE_DIR = 'Images/'
+CACHE_DIR = '.cache/'
 
 @dataclass
 class GameElement:
@@ -407,6 +410,7 @@ class MirrorDungeonRunner:
             x = GAME_ELEMENTS[x]
 
         location = None
+        # The world if I could use a match case statement with types
         if type(x) == GameElement:
             location = self.locate_on_screen(x)
             if not location:
@@ -522,6 +526,24 @@ class MirrorDungeonRunner:
 
         return dest
 
+    def saveSelectedTeam(self, index: int) -> None:
+        data = {
+            "team": index,
+            "date": datetime.datetime.now().isoformat()
+        }
+        with open(f'{CACHE_DIR}selected-team.json', 'w') as file:
+            file.write(json.dumps(data))
+
+    def loadLastSelectedTeam(self) -> None:
+        try:
+            with open(f'{CACHE_DIR}selected-team.json', 'r') as file:
+                data: dict = json.loads(file.read())
+                self.curTeam = self.teams[data['team']]
+        except json.JSONDecodeError as e:
+            print("No valid json data in selected-team.json cache found")
+        except FileNotFoundError as e:
+            print("File 'selected-team.json' not found")
+
     def selectTeam(self) -> None:
         self.move_to_element('Teams')
         pyautogui.moveRel(0, 50)
@@ -533,7 +555,7 @@ class MirrorDungeonRunner:
         maxBonus = 0
         maxTeamRow = 1
 
-        for team in self.teams:
+        for team_i, team in enumerate(self.teams):
             curRow = self.scrollTo(int(team[0]), curRow)
             time.sleep(random.uniform(0.3, 2.0))
             self.human_click()
@@ -548,6 +570,7 @@ class MirrorDungeonRunner:
 
                 maxTeamRow = int(team[0])
                 self.curTeam = team
+                self.saveSelectedTeam(team_i)
 
         curRow = self.scrollTo(maxTeamRow, curRow)
         time.sleep(random.uniform(0.1, 0.7))
