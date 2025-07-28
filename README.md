@@ -1,4 +1,4 @@
-﻿# P-EnterBot!
+﻿# P-EnterBot! A.K.A. (LCMDDS) : Limbus Company Mirror Dungeon Do-er Script
 
 A program designed to run mirror dungeons in the hit Korean gacha game Limbus Company by Project Moon.
 
@@ -26,15 +26,59 @@ Install requirements `python3.12 -m pip install -r requirements.txt`
 
 # Usage
 
-`python3.12 P-EnterBot.py --runs (run count) --team (index of team in TeamConfig.csv) --hardMode (True/False) --oneBonusPerRun (True/False)`
+`python3.12 P-EnterBot.py --runs (run count) OR --queue (queue string ex. 1h4n) --team (index of team in TeamConfig.csv) --hardMode (True/False) --oneBonusPerRun (True/False)`
 
 If a run count is not provided through the programs arguments, it will ask for a run count upon launch.
 
-the `--team` argument is only intended to be used if you have to restart / start the program in the middle of a Mirror Dungeon run. Otherwise, the program will pick the team with the best rest bonus and use that.
+## Runs
 
-the `--hardMode` argument will run hard mode dungeons when True and normal dungeons when False. If weekly bonus is available and hard mode is on it will claim all bonuses. Otherwise it will claim no bonuses in normal mode.
+You can have the bot do runs in one of two ways.
 
-the `--oneBonusPerRun` argument will make the bot claim only one weekly bonus per run for optimal enkephalin per BP level.
+### Queue'd Runs
+
+Flag: `-q` / `--queue` (queue string)
+
+Pass the flag a queue string that matches into the regular expression `(\d+)[hnHN]`.
+
+Examples:
+
+- `-q 1h3n` Would do one hard and three normals
+- `--queue 1h1n1h` Would do one hard, one normal, and one last hard
+- `-q 10h2000n` Would do ten hards and two thousand normals
+
+### Mono-typed Runs
+
+Flag: `-r` / `--runs` (run count)
+
+In conjuction with the hard flags this arg will do n runs based on the input number. All of the same type.
+
+## Extra Team Selection
+
+### Select Team
+
+Flag: `-t` / `--team` (team index (starting from zero) in `Config/TeamConfig.csv`)
+
+The `--team` argument is only intended to be used if you have to restart / start the program in the middle of a Mirror Dungeon run. Otherwise, the program will pick the team with the best rest bonus and use that.
+
+### Load Last
+
+Flag: `-l` / `--loadLast`
+
+Alternatively, you can use the `--loadLast` argument. Which will load whatever team was selected last time.
+
+## Hard mode
+
+Flag: `-m` / `--hardMode`
+
+The `--hardMode` argument will run hard mode dungeons when True and normal dungeons when False. If weekly bonus is available and hard mode is on it will claim all bonuses. Otherwise it will claim no bonuses in normal mode.
+
+### One Weekly Bonus Per Run
+
+Flag: `-b` / `--oneBonusPerRun`
+
+The `--oneBonusPerRun` argument will make the bot claim only one weekly bonus per run for optimal enkephalin per BP level.
+
+## Other
 
 Pressing `q` in the terminal window will stop the program.
 
