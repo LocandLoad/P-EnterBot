@@ -236,7 +236,7 @@ class MirrorDungeonRunner:
     curState: int = -1
 
     teamSelected: bool = False
-    
+
     reselectNodePathColors: bool = True
     nodePathColorNear: tuple
     nodePathColorFar: tuple
@@ -244,18 +244,14 @@ class MirrorDungeonRunner:
     hardMode: bool
     weeklyBonusIndividual: bool
 
-    def __init__(self, team_id: int | None = None, hard: bool | None = None, individualBonus: bool | None = None) -> Self:
+    def __init__(self, team_id: int | None = None, individualBonus: bool | None = None) -> Self:
         self._get_screen_size()
         self._loadTeamConfigs()
 
         if (individualBonus is None):
             individualBonus = False
         self.weeklyBonusIndividual = individualBonus
-
-        if (hard is None):
-            self.hardMode = False
-        else:
-            self.hardMode = hard
+        self.hardMode = False
 
         if team_id:
             self.curTeam = self.teams[team_id]
