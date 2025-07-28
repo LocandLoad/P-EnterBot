@@ -1,6 +1,8 @@
+import datetime
 import logging
 import random
 import time
+import json
 import math
 import csv
 import os
@@ -17,6 +19,7 @@ from PIL import Image
 logging.basicConfig(format='%(levelname)s:%(funcName)s - %(message)s', level=logging.DEBUG)
 
 IMAGE_DIR = 'Images/'
+CACHE_DIR = '.cache/'
 
 @dataclass
 class GameElement:
@@ -236,7 +239,7 @@ class MirrorDungeonRunner:
     curState: int = -1
 
     teamSelected: bool = False
-    
+
     reselectNodePathColors: bool = True
     nodePathColorNear: tuple
     nodePathColorFar: tuple
@@ -244,18 +247,14 @@ class MirrorDungeonRunner:
     hardMode: bool
     weeklyBonusIndividual: bool
 
-    def __init__(self, team_id: int | None = None, hard: bool | None = None, individualBonus: bool | None = None) -> Self:
+    def __init__(self, team_id: int | None = None, individualBonus: bool | None = None) -> Self:
         self._get_screen_size()
         self._loadTeamConfigs()
 
         if (individualBonus is None):
             individualBonus = False
         self.weeklyBonusIndividual = individualBonus
-
-        if (hard is None):
-            self.hardMode = False
-        else:
-            self.hardMode = hard
+        self.hardMode = False
 
         if team_id:
             self.curTeam = self.teams[team_id]
@@ -411,6 +410,7 @@ class MirrorDungeonRunner:
             x = GAME_ELEMENTS[x]
 
         location = None
+        # The world if I could use a match case statement with types
         if type(x) == GameElement:
             location = self.locate_on_screen(x)
             if not location:
@@ -465,7 +465,7 @@ class MirrorDungeonRunner:
 
     def get_to_mirror_dungeon(self) -> None:
         while True:
-            time.sleep(random.uniform(1.0, 5.0))
+            time.sleep(random.uniform(1.0, 3.0))
 
             state: int = self.find_state()
 
@@ -526,6 +526,24 @@ class MirrorDungeonRunner:
 
         return dest
 
+    def saveSelectedTeam(self, index: int) -> None:
+        data = {
+            "team": index,
+            "date": datetime.datetime.now().isoformat()
+        }
+        with open(f'{CACHE_DIR}selected-team.json', 'w') as file:
+            file.write(json.dumps(data))
+
+    def loadLastSelectedTeam(self) -> None:
+        try:
+            with open(f'{CACHE_DIR}selected-team.json', 'r') as file:
+                data: dict = json.loads(file.read())
+                self.curTeam = self.teams[data['team']]
+        except json.JSONDecodeError as e:
+            print("No valid json data in selected-team.json cache found")
+        except FileNotFoundError as e:
+            print("File 'selected-team.json' not found")
+
     def selectTeam(self) -> None:
         self.move_to_element('Teams')
         pyautogui.moveRel(0, 50)
@@ -537,9 +555,14 @@ class MirrorDungeonRunner:
         maxBonus = 0
         maxTeamRow = 1
 
-        for team in self.teams:
+        for team_i, team in enumerate(self.teams):
+
+            # Skip blank rows
+            if not team:
+                continue
+
             curRow = self.scrollTo(int(team[0]), curRow)
-            time.sleep(random.uniform(0.3, 2.0))
+            time.sleep(random.uniform(0.3, 1.5))
             self.human_click()
 
             time.sleep(random.uniform(0.1, 0.7))
@@ -552,6 +575,7 @@ class MirrorDungeonRunner:
 
                 maxTeamRow = int(team[0])
                 self.curTeam = team
+                self.saveSelectedTeam(team_i)
 
         curRow = self.scrollTo(maxTeamRow, curRow)
         time.sleep(random.uniform(0.1, 0.7))
@@ -659,7 +683,7 @@ class MirrorDungeonRunner:
         self.human_click('Shop_Leave')
         time.sleep(random.uniform(0.5, 2.0))
         self.human_click(1171,743)
-    
+
     #Worst Code Of All Time + Might Not Always Work
     def node_pathfind(self) -> bool:
         nodeScores = [0,0,0]
@@ -682,7 +706,7 @@ class MirrorDungeonRunner:
             if maxScore < nodeScores[0]:
                 maxScore = nodeScores[0]
                 maxScoreNode = 3
-        
+
         if pyautogui.pixelMatchesColor(NODE1PATHPIXELS[1][0],NODE1PATHPIXELS[1][1],self.nodePathColorNear, tolerance = 10):
             nodeScores[1] = self.get_node_rating(NODE2REGION)
             tempScore = nodeScores[1]
@@ -696,7 +720,7 @@ class MirrorDungeonRunner:
             if maxScore < nodeScores[1]:
                 maxScore = nodeScores[1]
                 maxScoreNode = 2
-        
+
         if pyautogui.pixelMatchesColor(NODE1PATHPIXELS[2][0],NODE1PATHPIXELS[2][1],self.nodePathColorNear, tolerance = 10):
             nodeScores[2] = self.get_node_rating(NODE4REGION)
             tempScore = nodeScores[2]
@@ -722,11 +746,11 @@ class MirrorDungeonRunner:
                 self.human_click(pyautogui.center(NODE4REGION))
                 return True
 
-        
+
         return False
 
 
-    
+
     def get_node_rating(self, region: tuple) -> int:
         if self.on_screen(GameElement(-2, "Node_Event.png", region, grayscale = True, confidence = 0.8)):
             return 5
@@ -812,7 +836,7 @@ class MirrorDungeonRunner:
         game_element: GameElement = GAME_ELEMENTS["Pack_Owned"]
         score -= self.score_elements(region,game_element)
         return score
-    
+
 
 
     def score_gift(self, region: tuple) -> int:
@@ -874,7 +898,7 @@ class MirrorDungeonRunner:
         if self.on_screen(game_element):
             score -= 1
         return score
-    
+
 
 
     def choose_best_gift(self) -> None:
@@ -1012,7 +1036,7 @@ class MirrorDungeonRunner:
                     for i in range(12):
                         self.human_click(SINNER_COORDINATES[self.curTeam[i+2].lower()])
                         time.sleep(random.uniform(0.3, 1.5))
-                    
+
                     self.teamSelected = True
 
                 time.sleep(random.uniform(0.25, 0.75))
@@ -1060,10 +1084,10 @@ class MirrorDungeonRunner:
                         self.human_click('WeeklyBonusButtonOff1')
                         time.sleep(random.uniform(0.2,0.6))
                         self.human_click("WeeklyBonusButtonOn2")
-                            
+
                 else:
                     self.human_click('WeeklyBonusButtonOn1')
-                
+
                 self.human_click(1330, 810)
 
             case 24: # End exploration complete
