@@ -240,7 +240,8 @@ class MirrorDungeonRunner:
 
     teamSelected: bool = False
 
-    reselectNodePathColors: bool = True
+    nodePathColorsSelected: bool = False
+    reselectNodePathColors: bool = False
     nodePathColorNear: tuple
     nodePathColorFar: tuple
 
@@ -991,7 +992,10 @@ class MirrorDungeonRunner:
                     self.nodePathColorNear = pyautogui.pixel(NODEPATHSEARCHNEAR[0],NODEPATHSEARCHNEAR[1])
                     self.nodePathColorFar = pyautogui.pixel(NODEPATHSEARCHFAR[0],NODEPATHSEARCHFAR[1])
                     self.reselectNodePathColors = False
-                if (not self.node_pathfind()):
+                    self.nodePathColorsSelected = True
+                if (self.nodePathColorsSelected):
+                    self.node_pathfind()
+                else:
                     located = False
                     if self.on_screen('Clock_Face'):
                         time.sleep(random.uniform(0.5, 1.5))
@@ -1021,6 +1025,8 @@ class MirrorDungeonRunner:
 
                 if self.on_screen('Enter_Node'):
                     pyautogui.press('enter')
+                else:
+                    self.human_click('Clock_Face')
 
             case 13: # Event
                 self.do_event()
