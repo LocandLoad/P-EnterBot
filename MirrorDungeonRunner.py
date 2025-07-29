@@ -465,7 +465,7 @@ class MirrorDungeonRunner:
 
     def get_to_mirror_dungeon(self) -> None:
         while True:
-            time.sleep(random.uniform(1.0, 3.0))
+            time.sleep(random.uniform(0.1, 0.3))
 
             state: int = self.find_state()
 
