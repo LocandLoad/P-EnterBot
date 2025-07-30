@@ -8,3 +8,5 @@ __pycache__
 venv
 TeamConfig.csv
 debug.py
+dist
+*.spec

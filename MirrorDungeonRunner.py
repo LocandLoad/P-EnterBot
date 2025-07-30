@@ -6,6 +6,7 @@ import json
 import math
 import csv
 import os
+import sys
 
 from dataclasses import dataclass
 from typing import Self
@@ -235,6 +236,7 @@ class MirrorDungeonRunner:
 
     resizing_needed: bool = False
     image_dir: str = IMAGE_DIR
+    application_path : str
 
     curState: int = -1
 
@@ -249,9 +251,9 @@ class MirrorDungeonRunner:
     weeklyBonusIndividual: bool
 
     def __init__(self, team_id: int | None = None, individualBonus: bool | None = None) -> Self:
+        self.application_path = self.get_abs_path()
         self._get_screen_size()
         self._loadTeamConfigs()
-
         if (individualBonus is None):
             individualBonus = False
         self.weeklyBonusIndividual = individualBonus
@@ -302,21 +304,32 @@ class MirrorDungeonRunner:
 
         # Set image dir to resized images
         self.image_dir = 'Scaled_Images/'
+    def get_abs_path(self):
+        if getattr(sys, 'frozen', False):
+            # Running as a PyInstaller frozen executable
+            application_path = os.path.dirname(sys.executable)
+        else:
+            # Running as a standard Python script
+            application_path = os.path.dirname(os.path.abspath(__file__))
+        return application_path
 
+    
     def _makeConfig(self) -> None:
-        with open("Config/TeamConfig.csv", 'w', newline='') as file:
+        with open(os.path.join(self.application_path, "Config", "TeamConfig.csv"), 'w', newline='') as file:
             csv_writer = csv.writer(file)
             header = ["TeamRow","Type","Sinner1", "Sinner2", "Sinner3", "Sinner4", "Sinner5", "Sinner6", "Sinner7", "Sinner8", "Sinner9", "Sinner10", "Sinner11", "Sinner12"]
-            csv_writer.writerows([header].extend(DEFAULT_TEAMS))
+            csv_content = [header]
+            csv_content.extend(DEFAULT_TEAMS)
+            csv_writer.writerows(csv_content)
 
     def _loadTeamConfigs(self) -> None:
-        if not os.path.exists("Config/"):
-            os.makedirs("Config")
+        if not os.path.exists(os.path.join(self.application_path,"Config/")):
+            os.makedirs(os.path.join(self.application_path,"Config"))
             self._makeConfig()
-        elif not os.path.exists("Config/TeamConfig.csv"):
+        elif not os.path.exists(os.path.join(self.application_path, "Config/TeamConfig.csv")):
             self._makeConfig()
 
-        with open('Config/TeamConfig.csv', 'r') as file:
+        with open(os.path.join(self.application_path, "Config", "TeamConfig.csv"), 'r') as file:
             csv_reader = csv.reader(file)
             self.teams = []
 
@@ -347,11 +360,18 @@ class MirrorDungeonRunner:
     def scale_y(self, y: int) -> int:
         return (y / 1080) * self.height
 
+    def resource_path(self, relative_path: str) -> str:
+        try:
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+        return os.path.join(base_path, relative_path)
+    
     def on_screen(self, game_element: GameElement | str) -> bool:
         if type(game_element) == str:
             game_element: GameElement = GAME_ELEMENTS[game_element]
 
-        image_path: str = os.path.join(self.image_dir, game_element.image)
+        image_path: str = self.resource_path(os.path.join(self.image_dir, game_element.image))
         try:
             pyautogui.locateOnScreen(
                 image_path,
@@ -368,7 +388,7 @@ class MirrorDungeonRunner:
         if type(game_element) == str:
             game_element: GameElement = GAME_ELEMENTS[game_element]
 
-        image_path: str = os.path.join(self.image_dir, game_element.image)
+        image_path: str = self.resource_path(os.path.join(self.image_dir, game_element.image))
 
         region = game_element.region
         if self.resizing_needed:
@@ -388,7 +408,7 @@ class MirrorDungeonRunner:
         if type(game_element) == str:
             game_element: GameElement = GAME_ELEMENTS[game_element]
 
-        image_path: str = os.path.join(self.image_dir, game_element.image)
+        image_path: str = self.resource_path(os.path.join(self.image_dir, game_element.image))
 
         region = game_element.region
         if self.resizing_needed:
@@ -532,12 +552,14 @@ class MirrorDungeonRunner:
             "team": index,
             "date": datetime.datetime.now().isoformat()
         }
-        with open(f'{CACHE_DIR}selected-team.json', 'w') as file:
+        if not os.path.exists(os.path.join(self.application_path,CACHE_DIR)):
+            os.makedirs(os.path.join(self.application_path,CACHE_DIR))
+        with open(os.path.join(self.application_path, f'{CACHE_DIR}selected-team.json'), 'w') as file:
             file.write(json.dumps(data))
 
     def loadLastSelectedTeam(self) -> None:
         try:
-            with open(f'{CACHE_DIR}selected-team.json', 'r') as file:
+            with open(os.path.join(self.application_path, f'{CACHE_DIR}selected-team.json'), 'r') as file:
                 data: dict = json.loads(file.read())
                 self.curTeam = self.teams[data['team']]
         except json.JSONDecodeError as e:

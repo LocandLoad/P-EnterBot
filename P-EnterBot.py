@@ -25,6 +25,8 @@ parser.add_argument('-r', '--runs', type=int)
 parser.add_argument('-t', '--team', type=int)
 parser.add_argument('-m', '--hardMode', type=bool)
 parser.add_argument('-b', '--oneBonusPerRun', type=bool)
+parser.add_argument('--multiprocessing-fork', type=str)
+parser.add_argument('pipe_handle=', type=str, default="", nargs="?")
 
 pyautogui.FAILSAFE = False
 
