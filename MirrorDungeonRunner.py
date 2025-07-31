@@ -1007,7 +1007,7 @@ class MirrorDungeonRunner:
 
                 #self.move_to_element('Pack_Hanger')
                 pyautogui.dragRel(0, 500, 1)
-                reselectNodePathColors = True
+                self.reselectNodePathColors = True
 
             case 12: # Node Selection
                 if (self.reselectNodePathColors):
@@ -1016,7 +1016,8 @@ class MirrorDungeonRunner:
                     self.reselectNodePathColors = False
                     self.nodePathColorsSelected = True
                 if (self.nodePathColorsSelected):
-                    self.node_pathfind()
+                    if (self.node_pathfind()):
+                        print("happened")
                 else:
                     located = False
                     if self.on_screen('Clock_Face'):
