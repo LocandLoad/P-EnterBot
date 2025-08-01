@@ -971,6 +971,34 @@ class MirrorDungeonRunner:
             time.sleep(random.uniform(0.2, 1.5))
             self.human_click(1705, 870)
 
+    def backup_pathfind(self) -> None:
+        located = False
+        if self.on_screen('Clock_Face'):
+            time.sleep(random.uniform(0.5, 1.5))
+            coords: tuple = self.locate_on_screen('Clock_Face')
+            if coords:
+                x, y = pyautogui.center(coords)
+                pyautogui.moveTo(x, y)
+                time.sleep(random.uniform(0.1, 0.5))
+                x += 330
+                y -= 280
+                self.human_click(x, y)
+                time.sleep(random.uniform(0.2, 0.5))
+                located = True
+
+        failCounter = 0
+        if located:
+            while not self.on_screen('Enter_Node'):
+                logging.debug(f'trying to enter node {x=} {y=}')
+                y += 300
+                self.human_click(x, y)
+                time.sleep(random.uniform(0.25, 1.5))
+                failCounter += 1
+                if failCounter > 3:
+                    break
+            time.sleep(random.uniform(0.35, 1.0))
+            pyautogui.press('enter')
+
     # Main MD Logic Loop
     def process_state(self) -> bool:
         match self.curState:
@@ -1016,36 +1044,11 @@ class MirrorDungeonRunner:
                     self.reselectNodePathColors = False
                     self.nodePathColorsSelected = True
                 if (self.nodePathColorsSelected):
-                    if (self.node_pathfind()):
-                        print("happened")
+                    if not self.node_pathfind():
+                        self.backup_pathfind()
                 else:
-                    located = False
-                    if self.on_screen('Clock_Face'):
-                        time.sleep(random.uniform(0.5, 1.5))
-                        coords: tuple = self.locate_on_screen('Clock_Face')
-                        if coords:
-                            x, y = pyautogui.center(coords)
-                            pyautogui.moveTo(x, y)
-                            time.sleep(random.uniform(0.1, 0.5))
-                            x += 330
-                            y -= 280
-                            self.human_click(x, y)
-                            time.sleep(random.uniform(0.2, 0.5))
-                            located = True
-
-                    failCounter = 0
-                    if located:
-                        while not self.on_screen('Enter_Node'):
-                            logging.debug(f'trying to enter node {x=} {y=}')
-                            y += 300
-                            self.human_click(x, y)
-                            time.sleep(random.uniform(0.25, 1.5))
-                            failCounter += 1
-                            if failCounter > 3:
-                                break
-                        time.sleep(random.uniform(0.35, 1.0))
-                        pyautogui.press('enter')
-
+                    self.backup_pathfind()
+                
                 if self.on_screen('Enter_Node'):
                     pyautogui.press('enter')
                 else:
