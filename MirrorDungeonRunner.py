@@ -1052,6 +1052,7 @@ class MirrorDungeonRunner:
                 if self.on_screen('Enter_Node'):
                     pyautogui.press('enter')
                 else:
+                    self.backup_pathfind()
                     self.human_click('Clock_Face')
 
             case 13: # Event
