@@ -136,7 +136,8 @@ def makeGUI() -> GUIResult:
         
 
     ttk.Button(frm, text="Enter", command=enterButton).grid(column=2,row=8)
-
+    global returnVar
+    returnVar = None
     root.mainloop()
     
     return returnVar
