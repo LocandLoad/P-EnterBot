@@ -82,6 +82,7 @@ GAME_ELEMENTS = {
     "WeeklyBonusSpend" : GameElement(29, "WeeklyBonusSpend.png", (625,421,900,300)),
     "FORGO_EGO_GIFT_SEARCH" : GameElement(30, "FORGO_EGO_GIFT_SEARCH.png", (740,480,400,100)),
     "EGO_GIFT_SEARCH" : GameElement(31, "EGO_GIFT_SEARCH.png", (205,32,350,100)),
+    "SuperpositionMD6" : GameElement(32, "SuperpositionMD6.png", (570,418,800,150)),
     "Team_TwelveOfTwelve" : GameElement(-2, "Team_TwelveOfTwelve.png", (1595,750,300,200)),
     "RestBonus_0" : GameElement(-2, "RestBonus_0.png", REST_BONUS_REGION, 0.95, False),
     "RestBonus_1" : GameElement(-2, "RestBonus_1.png", REST_BONUS_REGION, 0.9, False),
@@ -185,6 +186,7 @@ BASE_STATES = [
     "EGO_GIFT_GET",
     "Theme_Pack",
     "SelectEventEffect",
+    "SuperpositionMD6",
     "NodeSelect",
     "Event_Skip",
     "Team_Total_Participants",
@@ -1160,6 +1162,8 @@ class MirrorDungeonRunner:
                 self.human_click(1144,749)
             case 31: #ego gift search
                 self.human_click(1366,886)
+            case 32: #superposition mode
+                self.human_click(793,675)
         return True
 
 
