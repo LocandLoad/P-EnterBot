@@ -10,3 +10,4 @@ TeamConfig.csv
 debug.py
 dist
 *.spec
+*.cache
