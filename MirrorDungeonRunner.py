@@ -520,17 +520,23 @@ class MirrorDungeonRunner:
         self.human_click(700,400)
         self.human_click(1756,991)
 
+
     def get_rest_bonus(self) -> int:
-        rest_bonus = 0
+            nums = set()
 
-        # TODO : Add rest bonuses beyond 5 xD
-        for i in range(1, 6):
-            temp = self.locate_all_on_screen(f'Rest{i}')
-            if temp:
-                logging.debug(f'{len(temp)}, {i} rest bonuses')
-                rest_bonus += min(len(temp), 12) * i
+            for i in range(0, 10):
+                if (temp := self.locate_all_on_screen(GAME_ELEMENTS[f'RestBonus_{i}'])):
+                    for n in temp:
+                        nums.add((n.left, i))
 
-        return rest_bonus
+            digitList: list = sorted(nums, reverse=True)
+            returnVal = 0
+            counter = 0
+            for digit in digitList:
+                returnVal += digit[1] * (10 ** counter)
+                counter += 1
+            logging.debug(f'rest_bonus={returnVal}')
+            return returnVal
 
     def scrollTo(self, dest: int, cur: int) -> int:
         diff: int = cur - dest
