@@ -89,7 +89,7 @@ GAME_ELEMENTS = {
     "RestBonus_2" : GameElement(-2, "RestBonus_2.png", REST_BONUS_REGION, 0.9, False),
     "RestBonus_3" : GameElement(-2, "RestBonus_3.png", REST_BONUS_REGION, 0.9, False),
     "RestBonus_4" : GameElement(-2, "RestBonus_4.png", REST_BONUS_REGION, 0.9, False),
-    "RestBonus_5" : GameElement(-2, "RestBonus_5.png", REST_BONUS_REGION, 0.925, False),
+    "RestBonus_5" : GameElement(-2, "RestBonus_5.png", REST_BONUS_REGION, 0.9, False),
     "RestBonus_6" : GameElement(-2, "RestBonus_6.png", REST_BONUS_REGION, 0.9, False),
     "RestBonus_7" : GameElement(-2, "RestBonus_7.png", REST_BONUS_REGION, 0.925),
     "RestBonus_8" : GameElement(-2, "RestBonus_8.png", REST_BONUS_REGION, 0.95, False),
